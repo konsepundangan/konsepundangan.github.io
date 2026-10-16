@@ -475,11 +475,13 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
         </button>
     </div>
 
-    <!-- Modal & Toast -->
-    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 bg-green-600 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-full shadow-2xl flex items-center gap-2 md:gap-3 transition-all duration-300 z-50 pointer-events-none w-max max-w-[90vw] text-sm md:text-base">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <span id="toast-message" class="font-medium">Teks berhasil disalin!</span>
+   <!-- Modal & Toast -->
+ <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 bg-green-600 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg shadow-2xl flex items-center gap-3 md:gap-4 transition-all duration-300 z-50 pointer-events-none w-max max-w-[90vw] text-sm md:text-base border border-green-500/50">
+    <div class="flex flex-col gap-0.5">
+        <span class="font-medium text-green-100">Teks disalin ✓</span>
+        <span id="toast-message" class="text-xs text-white opacity-90 break-words line-clamp-2"></span>
     </div>
+</div>
 
     <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-all duration-300 opacity-0 pointer-events-none p-4">
         <div id="modalContent" class="bg-dark-800 border border-gold-500/30 p-5 md:p-6 rounded-xl shadow-2xl max-w-sm w-full transform scale-95 transition-transform duration-300">
@@ -1190,110 +1192,124 @@ ${document.getElementById('hormat').value.trim()}
 ${turutMengundangText}`;
         }
 
-        function copyCorelFileName() {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            const tglHariIni = `${yyyy}.${mm}.${dd}`;
+     // Mengambil nilai input dengan fallback
+const getVal = (id, fallback = '') => document.getElementById(id)?.value.trim() || fallback;
 
-            const kode = document.getElementById('kodeUndangan').value.trim() || 'KODE';
-            const panggilW = (document.getElementById('wPanggilan').value.trim() || 'Wanita').replace(/\s+/g, '');
-            const panggilP = (document.getElementById('pPanggilan').value.trim() || 'Pria').replace(/\s+/g, '');
-            
-            const susunan = document.getElementById('susunan').value;
-            const namaPanggilan = susunan === 'pria' ? `${panggilP}&${panggilW}` : `${panggilW}&${panggilP}`;
-            
-            const jumlah = document.getElementById('jumlahUndangan').value.trim() || '0';
-            
-            const fileName = `${tglHariIni} ${kode} ${namaPanggilan} x${jumlah}`;
-            
-            executeCopy(fileName, "Nama File Corel berhasil disalin!");
-        }
+// Mengurai string tanggal
+const parseDateString = dateString => {
+    const match = dateString.match(/(\d{1,2})[\s\-\/]+([a-zA-Z]+|\d{1,2})[\s\-\/]+(\d{4})/);
+    return match ? { tanggal: match[1], bulan: match[2], tahun: match[3] } : null;
+};
 
-        function copyFullText() { executeCopy(document.getElementById('previewText').value, "Seluruh teks berhasil disalin!"); }
-        function copyGroomName() { executeCopy(document.getElementById('pNama').value.trim(), "Nama Mempelai Pria berhasil disalin!"); }
-        function copyBrideName() { executeCopy(document.getElementById('wNama').value.trim(), "Nama Mempelai Wanita berhasil disalin!"); }
-        function copyTanggalAkad() { 
-            const j = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
-            executeCopy(document.getElementById('tanggalAkad').value.trim(), `Tanggal ${j === 'kristen' ? 'Pemberkatan' : 'Akad'} berhasil disalin!`); 
-        }
-        function copyTanggalResepsi() { executeCopy(document.getElementById('tanggalResepsi').value.trim(), "Tanggal Resepsi Full berhasil disalin!"); }
+// Fungsi penyalinan spesifik
+function copyCorelFileName() {
+    const today = new Date();
+    const tglHariIni = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+    
+    const kode = getVal('kodeUndangan', 'KODE');
+    const panggilW = getVal('wPanggilan', 'Wanita').replace(/\s+/g, '');
+    const panggilP = getVal('pPanggilan', 'Pria').replace(/\s+/g, '');
+    const susunan = getVal('susunan');
+    const namaPanggilan = susunan === 'pria' ? `${panggilP}&${panggilW}` : `${panggilW}&${panggilP}`;
+    const jumlah = getVal('jumlahUndangan', '0');
 
-        function copyHariResepsi() {
-            let tgl = document.getElementById('tanggalResepsi').value.trim();
-            let hari = tgl.split(',')[0].trim();
-            if (hari) executeCopy(hari, "Hari Resepsi berhasil disalin!");
-            else showModal("Format hari resepsi tidak ditemukan.");
-        }
-        
-        function parseDateString(dateString) {
-            const match = dateString.match(/(\d{1,2})[\s\-\/]+([a-zA-Z]+|\d{1,2})[\s\-\/]+(\d{4})/);
-            return match ? {tanggal: match[1], bulan: match[2], tahun: match[3]} : null;
-        }
-        function copyResepsiTanggalSaja() { 
-            const p = parseDateString(document.getElementById('tanggalResepsi').value.trim()); 
-            if(p) executeCopy(p.tanggal, "Tanggal (Angka) disalin!"); 
-            else showModal("Format tanggal tidak valid."); 
-        }
-        
-        function copyTglDanWaktuAkad() {
-            let tgl = document.getElementById('tanggalAkad').value.trim();
-            let wkt = document.getElementById('jamAkad').value.trim();
-            let wktText = wkt ? (wkt.toLowerCase().includes("pukul") ? wkt : `Pukul ${wkt}`) : "";
-            
-            const combined = (tgl || wkt) ? `${tgl} | ${wktText}`.replace(/^ \| | \| $/g, '') : '';
-            const jenis = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
-            const label = jenis === 'kristen' ? 'Pemberkatan' : 'Akad';
-            
-            if (!combined) { showModal(`Tanggal dan Waktu ${label.toLowerCase()} kosong.`); return; }
-            executeCopy(combined, `Tanggal & Waktu ${label} disalin!`);
-        }
+    executeCopy(`${tglHariIni} ${kode} ${namaPanggilan} x${jumlah}`);
+}
 
-        function copyResepsiBulanTahun() {
-            const p = parseDateString(document.getElementById('tanggalResepsi').value.trim());
-            if (p) executeCopy(`${p.bulan}\n${p.tahun}`, "Bulan & Tahun Resepsi disalin!");
-            else showModal("Format tanggal resepsi tidak valid.");
-        }
+function copyFullText() { executeCopy(getVal('previewText')); }
+function copyGroomName() { executeCopy(getVal('pNama')); }
+function copyBrideName() { executeCopy(getVal('wNama')); }
 
-        function copyAlamatAkad() { 
-            const j = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
-            executeCopy(`Bertempat di\n${document.getElementById('tempatAkad').value.trim()}\n${document.getElementById('alamatAkad').value.trim()}`, `Alamat ${j === 'kristen' ? 'Pemberkatan' : 'Akad'} berhasil disalin!`); 
-        }
-        function copyAlamatResepsi() { executeCopy(`Bertempat di\n${document.getElementById('tempatResepsi').value.trim()}\n${document.getElementById('alamatResepsi').value.trim()}`, "Alamat Resepsi berhasil disalin!"); }
-        function copyKeteranganResepsi() { const ket = document.getElementById('keteranganResepsi').value.trim(); if(ket) executeCopy(ket, "Keterangan resepsi disalin!"); else showModal("Kolom Keterangan masih kosong."); }
-        function copyTurutMengundang() {
-            const lines = document.getElementById('turutMengundang').value.split('\n').filter(l => l.trim() !== '');
-            if(lines.length === 0) showModal("Belum ada nama Pengundang.");
-            else executeCopy(lines.map(l => `* ${l.trim()}`).join('\n'), "Daftar Turut Mengundang disalin!");
-        }
-        function copyHostName() { executeCopy(document.getElementById('hormat').value.trim(), "Nama yang mengundang disalin!"); }
-        function copyAkadTime() { 
-            const jenis = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
-            const label = jenis === 'kristen' ? 'Pemberkatan' : 'Akad';
-            const j = document.getElementById('jamAkad').value.trim(); 
-            if(!j){showModal(`Waktu ${label.toLowerCase()} kosong.`); return;} 
-            executeCopy(j.toLowerCase().includes("pukul")?j:`Pukul ${j}`, `Waktu ${label.toLowerCase()} disalin!`); 
-        }
-        function copyResepsiTime() { const j = document.getElementById('jamResepsi').value.trim(); if(!j){showModal("Waktu resepsi kosong."); return;} executeCopy(j.toLowerCase().includes("pukul")?j:`Pukul ${j}`, "Waktu resepsi disalin!"); }
+function copyTanggalAkad() { 
+    executeCopy(getVal('tanggalAkad')); 
+}
 
-        function executeCopy(textToCopy, successMsg) {
-            if (!textToCopy) return;
-            const temp = document.createElement("textarea");
-            temp.value = textToCopy; temp.style.position = "fixed"; temp.style.opacity = "0";
-            document.body.appendChild(temp); temp.focus(); temp.select();
-            try { document.execCommand('copy') ? showToast(successMsg) : console.error('Gagal menyalin.'); } catch (err) {}
-            document.body.removeChild(temp);
-        }
+function copyTanggalResepsi() { executeCopy(getVal('tanggalResepsi')); }
 
-        let toastTimeout;
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            if (message) document.getElementById('toast-message').textContent = message;
-            if (toastTimeout) clearTimeout(toastTimeout);
-            toast.classList.replace('toast-exit', 'toast-enter');
-            toastTimeout = setTimeout(() => toast.classList.replace('toast-enter', 'toast-exit'), 3000);
-        }
+function copyHariResepsi() {
+    const hari = getVal('tanggalResepsi').split(',')[0].trim();
+    hari ? executeCopy(hari) : showModal("Format hari resepsi tidak ditemukan.");
+}
+
+function copyResepsiTanggalSaja() { 
+    const p = parseDateString(getVal('tanggalResepsi')); 
+    p ? executeCopy(p.tanggal) : showModal("Format tanggal tidak valid."); 
+}
+
+function copyTglDanWaktuAkad() {
+    const tgl = getVal('tanggalAkad');
+    const wkt = getVal('jamAkad');
+    const wktText = wkt ? (wkt.toLowerCase().includes("pukul") ? wkt : `Pukul ${wkt}`) : "";
+    const combined = (tgl || wkt) ? `${tgl} | ${wktText}`.replace(/^ \| | \| $/g, '') : '';
+    
+    combined ? executeCopy(combined) : showModal(`Tanggal dan Waktu kosong.`);
+}
+
+function copyResepsiBulanTahun() {
+    const p = parseDateString(getVal('tanggalResepsi'));
+    p ? executeCopy(`${p.bulan}\n${p.tahun}`) : showModal("Format tanggal resepsi tidak valid.");
+}
+
+function copyAlamatAkad() { 
+    executeCopy(`Bertempat di\n${getVal('tempatAkad')}\n${getVal('alamatAkad')}`); 
+}
+
+function copyAlamatResepsi() { 
+    executeCopy(`Bertempat di\n${getVal('tempatResepsi')}\n${getVal('alamatResepsi')}`); 
+}
+
+function copyKeteranganResepsi() { 
+    const ket = getVal('keteranganResepsi'); 
+    ket ? executeCopy(ket) : showModal("Kolom Keterangan masih kosong."); 
+}
+
+function copyTurutMengundang() {
+    const lines = getVal('turutMengundang').split('\n').filter(l => l.trim() !== '');
+    lines.length === 0 ? showModal("Belum ada nama Pengundang.") : executeCopy(lines.map(l => `* ${l.trim()}`).join('\n'));
+}
+
+function copyHostName() { executeCopy(getVal('hormat')); }
+
+function copyAkadTime() { 
+    const j = getVal('jamAkad'); 
+    j ? executeCopy(j.toLowerCase().includes("pukul") ? j : `Pukul ${j}`) : showModal(`Waktu kosong.`); 
+}
+
+function copyResepsiTime() { 
+    const j = getVal('jamResepsi'); 
+    j ? executeCopy(j.toLowerCase().includes("pukul") ? j : `Pukul ${j}`) : showModal("Waktu resepsi kosong."); 
+}
+
+// Eksekusi Salin
+function executeCopy(textToCopy) {
+    if (!textToCopy) return;
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+            const cleanText = textToCopy.replace(/\n/g, ' - ');
+            // Tampilkan seluruh teks yang disalin tanpa dipotong
+            showToast(`<span class="text-xs font-semibold text-gold-300 block">"${cleanText}"</span>`);
+        })
+        .catch(err => console.error('Gagal menyalin:', err));
+}
+
+// Toast Notifikasi
+let toastTimeout;
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    if (message) document.getElementById('toast-message').innerHTML = message;
+    
+    if (toastTimeout) clearTimeout(toastTimeout);
+    
+    // Pastikan Toast tampil
+    toast.classList.remove('toast-exit', 'translate-y-full', 'opacity-0');
+    toast.classList.add('toast-enter');
+    
+    toastTimeout = setTimeout(() => {
+        toast.classList.remove('toast-enter');
+        toast.classList.add('toast-exit');
+    }, 3000);
+}
+
     </script>
 </body>
 </html>
