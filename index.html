@@ -322,7 +322,7 @@
 
                         <div class="order-3 input-group mb-0">
                             <label class="input-label" for="jamResepsi">Waktu / Pukul Resepsi</label>
-                            <input type="text" id="jamResepsi" class="input-field" value="" placeholder="Contoh: 11.00 WITA - Selesai">
+                            <input type="text" id="jamResepsi" class="input-field" value="" placeholder="Contoh: 11.00 WITA s/d Selesai">
                         </div>
 
                         <div class="order-5 input-group mb-0">
@@ -923,15 +923,16 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             }
         }
 
+        // FUNGSI COPY ORANG TUA SUDAH DIPERBAIKI
         function copyBrideParent() {
             const text = getParentText('wanita', document.getElementById('wAnak').value, document.getElementById('wBapak').value, document.getElementById('wIbu').value);
-            if (text) executeCopy(text, "Info Orang Tua Mempelai Wanita berhasil disalin!");
+            if (text) executeCopy(text); // Hapus argumen kedua agar teks aslinya muncul di toast
             else showModal("Data orang tua mempelai wanita belum lengkap atau disembunyikan.");
         }
         
         function copyGroomParent() {
             const text = getParentText('pria', document.getElementById('pAnak').value, document.getElementById('pBapak').value, document.getElementById('pIbu').value);
-            if (text) executeCopy(text, "Info Orang Tua Mempelai Pria berhasil disalin!");
+            if (text) executeCopy(text); // Hapus argumen kedua agar teks aslinya muncul di toast
             else showModal("Data orang tua mempelai pria belum lengkap atau disembunyikan.");
         }
         
@@ -1137,6 +1138,23 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             return text;
         }
 
+        // Helper untuk memformat waktu agar setiap kata diawali huruf kapital (Title Case), dengan pengecualian "s/d"
+        function formatTeksWaktu(waktuVal) {
+            if (!waktuVal) return "";
+            let wkt = waktuVal.toLowerCase().includes("pukul") ? waktuVal : `Pukul ${waktuVal}`;
+            
+            return wkt.split(/\s+/).map(w => {
+                if (!w) return "";
+                let lowerW = w.toLowerCase();
+                
+                // Pengecualian agar s/d atau s.d tetap huruf kecil
+                if (lowerW === 's/d' || lowerW === 's.d' || lowerW === 's.d.') return lowerW;
+                
+                // Ubah huruf pertama menjadi kapital, dan sisanya tetap kecil
+                return lowerW.charAt(0).toUpperCase() + lowerW.slice(1);
+            }).join(' ');
+        }
+
         function generateText() {
             const susunan = document.getElementById('susunan').value;
             
@@ -1156,10 +1174,8 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
 
             const ket = document.getElementById('keteranganResepsi').value.trim();
 
-            const jAkad = document.getElementById('jamAkad').value.trim();
-            const jResepsi = document.getElementById('jamResepsi').value.trim();
-            let jamAkadText = jAkad ? (jAkad.toLowerCase().includes("pukul") ? jAkad : `Pukul ${jAkad}`) : "";
-            let jamResepsiText = jResepsi ? (jResepsi.toLowerCase().includes("pukul") ? jResepsi : `Pukul ${jResepsi}`) : "";
+            let jamAkadText = formatTeksWaktu(document.getElementById('jamAkad').value.trim());
+            let jamResepsiText = formatTeksWaktu(document.getElementById('jamResepsi').value.trim());
 
             const teksPembuka = document.getElementById('teksPembuka').value;
             const teksPenutup = document.getElementById('teksPenutup').value;
@@ -1216,7 +1232,7 @@ ${document.getElementById('hormat').value.trim()}
 ${turutMengundangText}`;
         }
 
-     // Mengambil nilai input dengan fallback
+// Mengambil nilai input dengan fallback
 const getVal = (id, fallback = '') => document.getElementById(id)?.value.trim() || fallback;
 
 // Mengurai string tanggal
@@ -1240,15 +1256,53 @@ function copyCorelFileName() {
     executeCopy(`${tglHariIni} ${kode} ${namaPanggilan} x${jumlah}`);
 }
 
-function copyFullText() { executeCopy(getVal('previewText'), true); }
-function copyGroomName() { executeCopy(getVal('pNama')); }
-function copyBrideName() { executeCopy(getVal('wNama')); }
-
-function copyTanggalAkad() { 
-    executeCopy(getVal('tanggalAkad')); 
+function copyFullText() { 
+    const text = getVal('previewText');
+    text ? executeCopy(text, true) : showModal("Teks undangan (Preview) masih kosong."); 
 }
 
-function copyTanggalResepsi() { executeCopy(getVal('tanggalResepsi')); }
+function copyGroomName() { 
+    const text = getVal('pNama');
+    text ? executeCopy(text) : showModal("Nama Lengkap Mempelai Pria masih kosong."); 
+}
+
+function copyBrideName() { 
+    const text = getVal('wNama');
+    text ? executeCopy(text) : showModal("Nama Lengkap Mempelai Wanita masih kosong."); 
+}
+
+function copyTanggalAkad() { 
+    const text = getVal('tanggalAkad');
+    text ? executeCopy(text) : showModal("Hari & Tanggal Akad/Pemberkatan masih kosong."); 
+}
+
+function copyTanggalResepsi() { 
+    const text = getVal('tanggalResepsi');
+    text ? executeCopy(text) : showModal("Hari & Tanggal Resepsi masih kosong."); 
+}
+
+// Perbaikan untuk copyHariResepsi agar lebih spesifik jika kolom benar-benar kosong
+function copyHariResepsi() {
+    const tanggalResepsi = getVal('tanggalResepsi');
+    if (tanggalResepsi) {
+        const hari = tanggalResepsi.split(',')[0].trim();
+        hari ? executeCopy(hari) : showModal("Format hari resepsi tidak ditemukan.");
+    } else {
+        showModal("Hari & Tanggal Resepsi masih kosong.");
+    }
+}
+
+function copyAlamatAkad() { 
+    const tempat = getVal('tempatAkad');
+    const alamat = getVal('alamatAkad');
+    (tempat || alamat) ? executeCopy(`Bertempat di\n${tempat}\n${alamat}`) : showModal("Lokasi Akad/Pemberkatan masih kosong."); 
+}
+
+function copyAlamatResepsi() { 
+    const tempat = getVal('tempatResepsi');
+    const alamat = getVal('alamatResepsi');
+    (tempat || alamat) ? executeCopy(`Bertempat di\n${tempat}\n${alamat}`) : showModal("Lokasi Resepsi masih kosong."); 
+}
 
 function copyHariResepsi() {
     const hari = getVal('tanggalResepsi').split(',')[0].trim();
@@ -1262,9 +1316,8 @@ function copyResepsiTanggalSaja() {
 
 function copyTglDanWaktuAkad() {
     const tgl = getVal('tanggalAkad');
-    const wkt = getVal('jamAkad');
-    const wktText = wkt ? (wkt.toLowerCase().includes("pukul") ? wkt : `Pukul ${wkt}`) : "";
-    const combined = (tgl || wkt) ? `${tgl} | ${wktText}`.replace(/^ \| | \| $/g, '') : '';
+    const wktText = formatTeksWaktu(getVal('jamAkad'));
+    const combined = (tgl || wktText) ? `${tgl} | ${wktText}`.replace(/^ \| | \| $/g, '') : '';
     
     combined ? executeCopy(combined) : showModal(`Tanggal dan Waktu kosong.`);
 }
@@ -1274,13 +1327,6 @@ function copyResepsiBulanTahun() {
     p ? executeCopy(`${p.bulan}\n${p.tahun}`) : showModal("Format tanggal resepsi tidak valid.");
 }
 
-function copyAlamatAkad() { 
-    executeCopy(`Bertempat di\n${getVal('tempatAkad')}\n${getVal('alamatAkad')}`); 
-}
-
-function copyAlamatResepsi() { 
-    executeCopy(`Bertempat di\n${getVal('tempatResepsi')}\n${getVal('alamatResepsi')}`); 
-}
 
 function copyKeteranganResepsi() { 
     const ket = getVal('keteranganResepsi'); 
@@ -1292,16 +1338,19 @@ function copyTurutMengundang() {
     lines.length === 0 ? showModal("Belum ada nama Pengundang.") : executeCopy(lines.map(l => `* ${l.trim()}`).join('\n'));
 }
 
-function copyHostName() { executeCopy(getVal('hormat')); }
+function copyHostName() { 
+    const host = getVal('hormat'); 
+    host ? executeCopy(host) : showModal("Nama Pengundang (Hormat Kami) masih kosong."); 
+}
 
 function copyAkadTime() { 
     const j = getVal('jamAkad'); 
-    j ? executeCopy(j.toLowerCase().includes("pukul") ? j : `Pukul ${j}`) : showModal(`Waktu kosong.`); 
+    j ? executeCopy(formatTeksWaktu(j)) : showModal(`Waktu kosong.`); 
 }
 
 function copyResepsiTime() { 
     const j = getVal('jamResepsi'); 
-    j ? executeCopy(j.toLowerCase().includes("pukul") ? j : `Pukul ${j}`) : showModal("Waktu resepsi kosong."); 
+    j ? executeCopy(formatTeksWaktu(j)) : showModal("Waktu resepsi kosong."); 
 }
 
 // Eksekusi Salin
@@ -1448,9 +1497,14 @@ async function uploadPdfToDrive() {
 
         const result = await response.json();
         
-     if (result.status === 'success') {
+        if (result.status === 'success') {
             // Otomatis Salin Link ke Clipboard dan munculkan Toast bawaan
             executeCopy(result.url, false);
+            
+            // Kosongkan form input
+            clearForm();
+            
+            
         } else {
             throw new Error(result.message);
         }
