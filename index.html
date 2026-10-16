@@ -149,7 +149,7 @@
                 <span class="font-semibold text-gold-300">Auto-Save Aktif:</span> Data otomatis disinkronisasi saat Anda mengetik dan berpindah kolom.
             </p>
             
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5 sm:gap-3 mb-6">
                 <button onclick="downloadTemplate()" class="w-full bg-green-700/80 hover:bg-green-600 text-white border border-green-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     Blangko Kosong
@@ -160,6 +160,12 @@
                     Import Data
                     <input type="file" id="fileUpload" accept=".xlsx, .xls, .pdf" class="hidden" onchange="handleAutoImport(event)">
                 </label>
+
+                <!-- Tombol Simpan ke Drive -->
+<button id="btnUploadDrive" onclick="uploadPdfToDrive()" class="w-full bg-[#4285F4]/80 hover:bg-[#4285F4] text-white border border-[#4285F4]/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10v9"/><path d="m15 13-3 3-3-3"/><path d="M20 21H4a2 2 0 0 1-2-2v-4.57c0-1.2.66-2.3 1.71-2.83l2.84-1.42A3 3 0 0 1 8 10h8a3 3 0 0 1 1.45.38l2.84 1.42c1.05.53 1.71 1.63 1.71 2.83V19a2 2 0 0 1-2 2Z"/><path d="M8 10V6a4 4 0 1 1 8 0v4"/></svg>
+    Simpan ke Drive
+</button>
 
                 <button onclick="trySendPdf()" class="w-full bg-[#25D366]/80 hover:bg-[#25D366] text-white border border-[#25D366]/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -1014,42 +1020,60 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             }, 200);
         }
 
-        async function sendPdfToWhatsApp() {
-            try {
-                const { PDFDocument, StandardFonts, rgb } = PDFLib;
-                const pdfDoc = await PDFDocument.create();
-                let page = pdfDoc.addPage();
-                const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-                
-                const data = {};
-                fieldIds.forEach(id => {
-                    const el = document.getElementById(id);
-                    if(el) data[id] = el.value;
-                });
-                // Sisipkan Session ID agar jika File PDF diimport di perangkat lain, 
-                // Sistem tahu bahwa ini berasal dari sesi DB yang sama
-                data['supabaseSessionId'] = supabaseSessionId;
-                
-                pdfDoc.setSubject(JSON.stringify(data));
-                pdfDoc.setTitle("Data Undangan - " + (data['wPanggilan'] || 'Mempelai'));
+       async function sendPdfToWhatsApp() {
+    try {
+        const { PDFDocument, StandardFonts, rgb } = PDFLib;
+        const pdfDoc = await PDFDocument.create();
+        let page = pdfDoc.addPage();
+        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        
+        const data = {};
+        fieldIds.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) data[id] = el.value;
+        });
 
-                const text = document.getElementById('previewText').value;
-                const lines = text.split('\n');
-                
-                let y = page.getHeight() - 50;
-                const fontSize = 11;
-                const lineHeight = 16;
-                const margin = 50;
-                
-                for (let line of lines) {
-                    if (y < 50) {
-                        page = pdfDoc.addPage();
-                        y = page.getHeight() - 50;
-                    }
-                    const cleanLine = line.replace(/[^\x20-\x7E\xA0-\xFF]/g, '').substring(0, 90);
-                    page.drawText(cleanLine, { x: margin, y: y, size: fontSize, font: font, color: rgb(0,0,0) });
-                    y -= lineHeight;
-                }
+        // 1. BUAT TANGGAL PEMBUATAN PDF
+        const now = new Date();
+        const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        // Contoh Output: "Jumat, 16 Oktober 2026 23:04"
+        const tanggalDibuat = now.toLocaleDateString('id-ID', optionsDate); 
+        
+        // 2. SIMPAN KE DALAM DATA (Metadata agar bisa ditarik)
+        data['tanggalDibuat'] = tanggalDibuat; 
+        data['supabaseSessionId'] = supabaseSessionId;
+        
+        pdfDoc.setSubject(JSON.stringify(data));
+        pdfDoc.setTitle("Data Undangan - " + (data['wPanggilan'] || 'Mempelai'));
+
+        // 3. TAMBAHKAN TANGGAL DI BAGIAN PALING ATAS PDF
+        let textToPrint = `Tanggal Pembuatan Data: ${tanggalDibuat}\n\n`; // Beri jarak 2 baris
+        textToPrint += document.getElementById('previewText').value; // Gabungkan dengan teks undangan
+        
+        const lines = textToPrint.split('\n'); // Gunakan teks gabungan
+        
+        let y = page.getHeight() - 50;
+        const fontSize = 11;
+        const lineHeight = 16;
+        const margin = 50;
+        
+        for (let line of lines) {
+            if (y < 50) {
+                page = pdfDoc.addPage();
+                y = page.getHeight() - 50;
+            }
+            const cleanLine = line.replace(/[^\x20-\x7E\xA0-\xFF]/g, '').substring(0, 90);
+            
+            // Opsional: Buat teks baris pertama (tanggal) sedikit berbeda (misal: warna abu-abu/lebih kecil)
+            if (line.startsWith("Tanggal Pembuatan Data:")) {
+                 page.drawText(cleanLine, { x: margin, y: y, size: 9, font: font, color: rgb(0.4, 0.4, 0.4) }); // Teks abu-abu
+            } else {
+                 page.drawText(cleanLine, { x: margin, y: y, size: fontSize, font: font, color: rgb(0,0,0) });
+            }
+            
+            y -= lineHeight;
+        }
+    
               
                 const pdfBytes = await pdfDoc.save();
                 const blob = new Blob([pdfBytes], { type: "application/pdf" });
@@ -1322,6 +1346,123 @@ function showToast(message) {
         toast.classList.remove('toast-enter');
         toast.classList.add('toast-exit');
     }, 3000);
+}
+
+// GANTI DENGAN URL WEB APP DARI LANGKAH 1
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6AZCbRl8yUvWFuiStX5dvcoHg8PMz_02I-c4Ag2cw79hKLBKwPHY_qunbc47tdP5k/exec";
+
+// Helper untuk mengubah Blob PDF menjadi teks Base64
+function blobToBase64(blob) {
+    return new Promise((resolve, _) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.readAsDataURL(blob);
+    });
+}
+
+// Fungsi Utama untuk Generate & Upload ke Drive
+async function uploadPdfToDrive() {
+    const btn = document.getElementById('btnUploadDrive');
+    const originalContent = btn.innerHTML;
+    
+    // Ubah status tombol jadi loading
+    btn.innerHTML = '<svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Mengunggah...';
+    btn.disabled = true;
+
+    try {
+        // --- 1. GENERATE PDF (Mengambil logika yang sama dengan sendPdfToWhatsApp) ---
+        const { PDFDocument, StandardFonts, rgb } = PDFLib;
+        const pdfDoc = await PDFDocument.create();
+        let page = pdfDoc.addPage();
+        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        
+        const data = {};
+        fieldIds.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) data[id] = el.value;
+        });
+
+        // 1. BUAT TANGGAL PEMBUATAN PDF
+        const now = new Date();
+        const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        // Contoh Output: "Jumat, 16 Oktober 2026 23:04"
+        const tanggalDibuat = now.toLocaleDateString('id-ID', optionsDate); 
+
+        // 2. SIMPAN KE DALAM DATA (Metadata agar bisa ditarik)
+        data['tanggalDibuat'] = tanggalDibuat;
+        data['supabaseSessionId'] = supabaseSessionId;
+        
+        pdfDoc.setSubject(JSON.stringify(data));
+        pdfDoc.setTitle("Data Undangan - " + (data['wPanggilan'] || 'Mempelai'));
+
+        // 3. TAMBAHKAN TANGGAL DI BAGIAN PALING ATAS PDF
+        let textToPrint = `Tanggal Pembuatan Data: ${tanggalDibuat}\n\n`; // Beri jarak 2 baris
+        textToPrint += document.getElementById('previewText').value; // Gabungkan dengan teks undangan
+
+        const lines = textToPrint.split('\n');
+        
+        let y = page.getHeight() - 50;
+        const fontSize = 11;
+        const lineHeight = 16;
+        const margin = 50; // Menambahkan margin agar rapi
+        
+        for (let line of lines) {
+            if (y < 50) {
+                page = pdfDoc.addPage();
+                y = page.getHeight() - 50;
+            }
+            const cleanLine = line.replace(/[^\x20-\x7E\xA0-\xFF]/g, '').substring(0, 90);
+            
+            // Opsional: Buat teks baris pertama (tanggal) sedikit berbeda (misal: warna abu-abu/lebih kecil)
+            if (line.startsWith("Tanggal Pembuatan Data:")) {
+                 page.drawText(cleanLine, { x: margin, y: y, size: 9, font: font, color: rgb(0.4, 0.4, 0.4) }); // Teks abu-abu
+            } else {
+                 page.drawText(cleanLine, { x: margin, y: y, size: fontSize, font: font, color: rgb(0,0,0) });
+            }
+            
+            y -= lineHeight;
+        }
+      
+        const pdfBytes = await pdfDoc.save();
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        
+        // Buat Nama File Dinamis
+        let namaWanita = (data['wPanggilan'] || 'Wanita').trim();
+        let namaPria = (data['pPanggilan'] || 'Pria').trim();
+        let susunanMempelai = data['susunan'] || 'wanita';
+        let namaFileGabungan = susunanMempelai === 'pria' ? `${namaPria}&${namaWanita}` : `${namaWanita}&${namaPria}`;
+        const fileName = `Data_Undangan_${namaFileGabungan.replace(/\s+/g, '')}.pdf`;
+
+        // --- 2. UBAH KE BASE64 & KIRIM KE GOOGLE SCRIPT ---
+        const base64Data = await blobToBase64(blob);
+        
+        const formData = new URLSearchParams();
+        formData.append('fileName', fileName);
+        formData.append('mimeType', 'application/pdf');
+        formData.append('fileData', base64Data);
+
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+        
+     if (result.status === 'success') {
+            // Otomatis Salin Link ke Clipboard dan munculkan Toast bawaan
+            executeCopy(result.url, false);
+        } else {
+            throw new Error(result.message);
+        }
+
+    } catch (error) {
+        console.error(error);
+        showModal("Terjadi kesalahan saat mengunggah file ke Google Drive.");
+    } finally {
+        // Kembalikan status tombol
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+    }
 }
 
     </script>
