@@ -645,6 +645,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
 
         // --- MANAJEMEN AUTENTIKASI LOGIN / SIGNUP ---
         let isSignUp = false;
+let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
 
         function renderAuth() {
             const userStr = localStorage.getItem('user_percetakan');
@@ -653,16 +654,26 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                 const user = JSON.parse(userStr);
                 authContainer.innerHTML = `
                     <span class="text-xs md:text-sm text-gold-300 font-semibold truncate max-w-[150px] mr-2" title="${user.nama}">${user.nama}</span>
+                    
+                    <button id="btnDownloadWa" onclick="downloadWaData()" class="bg-green-700/80 hover:bg-green-600 text-white text-[10px] md:text-xs py-1.5 px-3 rounded-lg border border-green-500/30 transition-all shadow-lg active:scale-95 mr-2 flex items-center gap-1 relative overflow-hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <span id="waCountText">Data WA</span>
+                    </button>
+
                     <button onclick="openEditProfileModal()" class="bg-gray-700/80 hover:bg-gray-600 text-white text-[10px] md:text-xs py-1.5 px-3 rounded-lg border border-gray-500/30 transition-all shadow-lg active:scale-95 mr-2">Edit Profile</button>
                     <button onclick="handleLogout()" class="bg-red-900/80 hover:bg-red-700 text-white text-[10px] md:text-xs py-1.5 px-3 rounded-lg border border-red-500/30 transition-all shadow-lg active:scale-95">Logout</button>
                 `;
+                
+                // Jalankan sistem Realtime
+                initWaRealtimeCounter(user.username);
+                
             } else {
                 authContainer.innerHTML = `
                     <button onclick="openAuthModal()" class="bg-blue-700/80 hover:bg-blue-600 text-white text-[10px] md:text-xs font-semibold py-2 px-4 rounded-lg border border-blue-500/30 transition-all shadow-lg active:scale-95">Login / Sign Up</button>
                 `;
             }
         }
-
+   
         function openAuthModal() {
             const modal = document.getElementById('authModal');
             modal.classList.remove('hidden');
@@ -811,8 +822,13 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
     }
 }
 
-        function handleLogout() {
+       function handleLogout() {
             localStorage.removeItem('user_percetakan');
+            // Putuskan koneksi realtime saat logout agar tidak memberatkan browser
+            if (waRealtimeChannel) {
+                supabaseClient.removeChannel(waRealtimeChannel);
+                waRealtimeChannel = null;
+            }
             showToast("Anda telah keluar (logout).");
             renderAuth();
         }
@@ -859,6 +875,163 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
     }
 }
 
+// --- FUNGSI DOWNLOAD DATA WA KE EXCEL (UPDATED) ---
+        async function downloadWaData() {
+            const userStr = localStorage.getItem('user_percetakan');
+            if (!userStr) return;
+            const user = JSON.parse(userStr);
+
+            const btn = document.getElementById('btnDownloadWa');
+            const originalHtml = btn.innerHTML;
+            
+            // Ubah state tombol saat loading
+            btn.innerHTML = 'Memuat...';
+            btn.disabled = true;
+
+            try {
+               // TAHAP 1: Ambil semua data undangan milik percetakan yang login
+                console.log("User Login saat ini:", user.username);
+
+                const { data: undanganData, error: errUndangan } = await supabaseClient
+                    .from('data_undangan')
+                    .select('id, url_undangan')
+                    .eq('usernamePercetakan', user.username);
+
+                console.log("Error Undangan:", errUndangan);
+                console.log("Data Undangan yang didapat:", undanganData);
+
+                if (errUndangan) throw errUndangan;
+
+                if (!undanganData || undanganData.length === 0) {
+                    showModal("Belum ada data undangan untuk percetakan Anda. (Silakan cek Console F12 untuk detailnya)");
+                    return;
+                }
+
+                // Ekstrak semua ID undangan milik percetakan ini
+                const weddingIds = undanganData.map(u => u.id);
+
+                // TAHAP 2: Ambil nomor WA yang memiliki wedding_id dari daftar di atas
+                const { data: waData, error: errWa } = await supabaseClient
+                    .from('pengingat_wa')
+                    .select('nomor_wa, created_at, wedding_id')
+                    .in('wedding_id', weddingIds)
+                    .order('created_at', { ascending: false });
+
+                if (errWa) throw errWa;
+
+                if (!waData || waData.length === 0) {
+                    showModal("Belum ada data nomor WhatsApp untuk percetakan Anda.");
+                    return;
+                }
+
+                // TAHAP 3: Gabungkan dan format data untuk Excel
+                const excelData = waData.map((item, index) => {
+                    const undangan = undanganData.find(u => u.id === item.wedding_id);
+                    
+                    const tgl = new Date(item.created_at).toLocaleDateString('id-ID', {
+                        day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                    });
+
+                    return {
+                        "No": index + 1,
+                        "Nomor WhatsApp": item.nomor_wa,
+                        "URL Undangan": undangan && undangan.url_undangan ? (BASE_WEB_URL + undangan.url_undangan) : '-',
+                        "Tanggal Dibuat": tgl
+                    };
+                });
+
+                // Proses generate Excel (XLSX)
+                const ws = XLSX.utils.json_to_sheet(excelData);
+                ws['!cols'] = [
+                    { wch: 5 },  // No
+                    { wch: 20 }, // Nomor WhatsApp
+                    { wch: 50 }, // URL Undangan
+                    { wch: 25 }  // Tanggal
+                ];
+                
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Data WA");
+
+                const tanggalBulanTahun = new Date().toISOString().split('T')[0];
+                XLSX.writeFile(wb, `Data_WA_${user.username}_${tanggalBulanTahun}.xlsx`);
+                
+                showToast("File Excel Data WA berhasil diunduh!");
+
+            } catch (err) {
+                console.error("Gagal mengunduh data WA:", err);
+                showModal("Terjadi kesalahan saat mengambil data dari server. Pastikan koneksi internet stabil.");
+            } finally {
+                // Kembalikan state tombol
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
+        }
+
+        // --- SISTEM SUPABASE REALTIME UNTUK COUNTER NOMOR WA ---
+        let currentWaCount = 0;
+        let userWeddingIds = [];
+
+        async function initWaRealtimeCounter(username) {
+            try {
+                // 1. Ambil daftar ID undangan milik percetakan yang sedang login
+                const { data: undanganData } = await supabaseClient
+                    .from('data_undangan')
+                    .select('id')
+                    .eq('usernamePercetakan', username);
+                    
+                if (!undanganData || undanganData.length === 0) return;
+                userWeddingIds = undanganData.map(u => u.id);
+                
+                // 2. Hitung jumlah nomor WA saat ini
+                const { count } = await supabaseClient
+                    .from('pengingat_wa')
+                    .select('*', { count: 'exact', head: true })
+                    .in('wedding_id', userWeddingIds);
+                    
+                currentWaCount = count || 0;
+                updateWaButtonUI();
+                
+                // 3. Daftarkan Supabase Realtime Listener (Mendengarkan data baru masuk)
+                if (waRealtimeChannel) supabaseClient.removeChannel(waRealtimeChannel);
+                
+                waRealtimeChannel = supabaseClient.channel('custom-wa-channel')
+                    .on(
+                        'postgres_changes', 
+                        { event: 'INSERT', schema: 'public', table: 'pengingat_wa' }, 
+                        (payload) => {
+                            // Cek apakah nomor WA yang baru masuk adalah milik undangan dari percetakan ini
+                            if (userWeddingIds.includes(payload.new.wedding_id)) {
+                                currentWaCount++;
+                                updateWaButtonUI(true); // true = mainkan animasi
+                            }
+                        }
+                    )
+                    .subscribe();
+                    
+            } catch (err) {
+                console.error("Gagal memuat realtime counter:", err);
+            }
+        }
+
+        function updateWaButtonUI(isNewData = false) {
+            const spanEl = document.getElementById('waCountText');
+            const btnEl = document.getElementById('btnDownloadWa');
+            
+            if (spanEl) {
+                spanEl.textContent = `Data WA (${currentWaCount})`;
+            }
+            
+            // Berikan efek kedip hijau dan toast ketika ada nomor baru masuk
+            if (isNewData && btnEl) {
+                btnEl.classList.add('bg-green-500', 'scale-105'); // Animasi membesar
+                showToast(`🔔 Ada ${currentWaCount} Nomor WA yang telah terdaftar!`);
+                
+                setTimeout(() => {
+                    btnEl.classList.remove('bg-green-500', 'scale-105');
+                }, 1000);
+            }
+        }
+        
         function closeEditProfileModal() {
             const modal = document.getElementById('editProfileModal');
             modal.classList.add('opacity-0', 'pointer-events-none');
