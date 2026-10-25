@@ -324,7 +324,19 @@
                 </fieldset>
 
                 <fieldset>
-                    <legend>Teks Pembuka & Penutup</legend>
+                    <legend>Teks Pembuka, Ayat & Penutup</legend>
+                    
+                    <div class="input-group mb-3">
+                        <label class="input-label" for="teksAyat">Ayat Suci / Kata Mutiara</label>
+                        <textarea id="teksAyat" rows="7" class="input-field resize-none">"Dan diantara tanda-tanda kekuasaan-Nya ialah
+diciptakannya untukmu istri-istri dari jenismu sendiri,
+supaya kamu cenderung dan merasa tentram kepadanya dan
+dijadikannya diantara kamu rasa kasih dan sayang,
+sesungguhnya yang demikian itu benar-benar
+terdapat tanda-tanda bagi kaum yang berfikir."
+(Qs. Ar Rum 21)</textarea>
+                    </div>
+
                     <div class="input-group mb-3">
                         <label class="input-label" for="teksPembuka">Teks Pembuka</label>
                         <textarea id="teksPembuka" rows="6" class="input-field resize-none">Bismillahirrahmanirrahim
@@ -333,13 +345,19 @@ Dengan memohon rahmat dan ridha Allah Subhanahu Wa Ta'ala,
 kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri
 acara pernikahan putra-putri kami:</textarea>
                     </div>
+                    
                     <div class="input-group mb-0">
                         <label class="input-label" for="teksPenutup">Teks Penutup</label>
-                        <textarea id="teksPenutup" rows="5" class="input-field resize-none">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i
+                        <textarea id="teksPenutup" rows="9" class="input-field resize-none">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i
 berkenan hadir dan memberikan doa restu kepada kedua mempelai.
 Atas kehadirannya kami ucapkan terimakasih.
 
-Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
+Wassalamu'alaikum Warahmatullahi Wabarakatuh
+
+Barakallahu Laka, Wa Baraka 'alaika Wa Jama'a Bainakuma Fii Khair
+"Mudah-mudahan Allah memberkahimu, baik ketika senang maupun susah
+dan selalu mengumpulkan kalian berdua dalam kebaikan."
+(H.R. Abu Daud)</textarea>
                     </div>
                 </fieldset>
             </form>
@@ -604,14 +622,14 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // DAFTAR FIELD (namaPercetakan & usernamePercetakan telah dihapus)
-        const fieldIds = [
+      const fieldIds = [
             'kodeUndangan', 'jumlahUndangan',
             'jenisUndangan', 'susunan', 'wNama', 'wPanggilan', 'wAnak', 'wBapak', 'wIbu', 
             'pNama', 'pPanggilan', 'pAnak', 'pBapak', 'pIbu', 
             'teksPengantarAcara', 
             'tanggalAkad', 'jamAkad', 'tempatAkad', 'alamatAkad', 
             'tanggalResepsi', 'jamResepsi', 'tempatResepsi', 'alamatResepsi', 'keteranganResepsi', 
-            'maps_link', 'turutMengundang', 'hormat', 'teksPembuka', 'teksPenutup'
+            'maps_link', 'turutMengundang', 'hormat', 'teksPembuka', 'teksPenutup', 'teksAyat'
         ];
 
         const fieldNamesDisplay = {
@@ -640,7 +658,8 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             'hormat': 'Hormat Kami (Tuan Rumah)',
             'teksPembuka': 'Teks Pembuka',
             'teksPenutup': 'Teks Penutup',
-            'teksPengantarAcara': 'Teks Pengantar Acara'
+            'teksPengantarAcara': 'Teks Pengantar Acara',
+            'teksAyat': 'Ayat Suci / Kata Mutiara'
         };
 
         // --- MANAJEMEN AUTENTIKASI LOGIN / SIGNUP ---
@@ -1148,7 +1167,7 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
             else if (ketOrderIndex === 4) wrap.classList.add('order-8');
         }
 
-        function gantiJenisUndangan(resetText = true) {
+ function gantiJenisUndangan(resetText = true) {
             const jenis = document.getElementById('jenisUndangan').value;
             const lAkad = document.getElementById('labelAkadUtama');
             
@@ -1162,17 +1181,20 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
             if (document.getElementById('btnCopyLokasiAkad')) document.getElementById('btnCopyLokasiAkad').textContent = (jenis === 'kristen') ? 'Salin Lokasi Pemberkatan' : 'Salin Lokasi Akad';
 
             if (resetText) {
+                const tAyat = document.getElementById('teksAyat');
                 const tPembuka = document.getElementById('teksPembuka');
                 const tPenutup = document.getElementById('teksPenutup');
                 const tPengantar = document.getElementById('teksPengantarAcara');
                 
                 if (jenis === 'kristen') {
+                    if (tAyat) tAyat.value = `"Demikianlah mereka bukan lagi dua, melainkan satu.\nKarena itu, apa yang telah dipersatukan Allah, tidak boleh diceraikan manusia."\n(Matius 19:6)\n\n"Dan diatas semuanya itu:\nKenakanlah kasih, sebagai pengikat yang mempersatukan\ndan menyempurnakan."\n(Kolose 3:14)`;
                     tPembuka.value = `Tuhan menjadikan segala sesuatu indah pada waktunya,\nindah pada saat Dia mempertemukan, indah saat Dia menumbuhkan kasih\ndan indah pada saat dia mempersatukan putra-putri kami\ndalam ikatan Pernikahan Kudus`;
                     tPenutup.value = `Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila\nBapak/ibu/Saudara(i) berkenan hadir dan memberikan doa restu kepada kedua mempelai. Atas kehadirannya kami ucapkan terima kasih.`;
                     tPengantar.value = `Dengan penuh rasa syukur atas kasih Anugerah Tuhan,\nkami mengundang Bapak/Ibu/Saudara(i) kiranya menghadiri\nacara pernikahan anak kami yang akan dilaksanakan pada:`;
                 } else {
+                    if (tAyat) tAyat.value = `"Dan diantara tanda-tanda kekuasaan-Nya ialah\ndiciptakannya untukmu istri-istri dari jenismu sendiri,\nsupaya kamu cenderung dan merasa tentram kepadanya dan\ndijadikannya diantara kamu rasa kasih dan sayang,\nsesungguhnya yang demikian itu benar-benar\nterdapat tanda-tanda bagi kaum yang berfikir."\n(Qs. Ar Rum 21)`;
                     tPembuka.value = `Bismillahirrahmanirrahim\nAssalamu'alaikum Warahmatullahi Wabarakatuh\nDengan memohon rahmat dan ridha Allah Subhanahu Wa Ta'ala,\nkami mengundang Bapak/Ibu/Saudara/i untuk menghadiri\nacara pernikahan putra-putri kami:`;
-                    tPenutup.value = `Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i\nberkenan hadir dan memberikan doa restu kepada kedua mempelai.\nAtas kehadirannya kami ucapkan terimakasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh`;
+                    tPenutup.value = `Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i\nberkenan hadir dan memberikan doa restu kepada kedua mempelai.\nAtas kehadirannya kami ucapkan terimakasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh\n\nBarakallahu Laka, Wa Baraka 'alaika Wa Jama'a Bainakuma Fii Khair\n"Mudah-mudahan Allah memberkahimu, baik ketika senang maupun susah\ndan selalu mengumpulkan kalian berdua dalam kebaikan."\n(H.R. Abu Daud)`;
                     tPengantar.value = `yang insyaa Allah akan dilaksanakan pada:`;
                 }
             }
@@ -1677,6 +1699,61 @@ async function generateWebLinkAndQR() {
     try {
         // Panggil fungsi save utama agar data diproses, dan ambil URL-nya
         const savedData = await saveToSupabaseSilently();
+
+        // Tambahkan kode ini di dalam blok try { ... } pada fungsi generateWebLinkAndQR()
+// Tepat setelah baris: const savedData = await saveToSupabaseSilently();
+
+if (savedData && savedData.url_undangan) {
+    // 1. Ekstrak data form untuk design
+    const panggilW = document.getElementById('wPanggilan').value.trim();
+    const panggilP = document.getElementById('pPanggilan').value.trim();
+    const susunan = document.getElementById('susunan').value;
+    
+    // Tentukan urutan nama berdasarkan susunan
+    const gabunganNama = susunan === 'pria' ? `${panggilP} & ${panggilW}` : `${panggilW} & ${panggilP}`;
+
+    // 2. Pecah string Hari & Tanggal Resepsi (Asumsi format: "Sabtu, 04 Juli 2026")
+    const tglResepsiText = document.getElementById('tanggalResepsi').value.trim();
+    const tglMatch = tglResepsiText.match(/([a-zA-Z]+),\s*(\d{1,2})\s*([a-zA-Z]+)\s*(\d{4})/);
+    
+    let resHari = "", resTanggal = "", resBulan = "", resTahun = "";
+    if (tglMatch) {
+        resHari = tglMatch[1];
+        resTanggal = tglMatch[2];
+        resBulan = tglMatch[3];
+        resTahun = tglMatch[4];
+    }
+
+    // 3. Bangun objek JSON untuk design_data
+    const designData = {
+        "cover-names": { "customText": gabunganNama },
+        "closing-names": { "customText": gabunganNama },
+        "akad-tanggal": { "customText": document.getElementById('tanggalAkad').value.trim() },
+        "akad-waktu": { "customText": document.getElementById('jamAkad').value.trim() },
+        "akad-tempat": { "customText": document.getElementById('tempatAkad').value.trim() },
+        "akad-alamat": { "customText": document.getElementById('alamatAkad').value.trim() },
+        "resepsi-hari": { "customText": resHari },
+        "resepsi-tanggal": { "customText": resTanggal },
+        "resepsi-bulan": { "customText": resBulan },
+        "resepsi-tahun": { "customText": resTahun },
+        "resepsi-waktu": { "customText": document.getElementById('jamResepsi').value.trim() },
+        "resepsi-tempat": { "customText": document.getElementById('tempatResepsi').value.trim() },
+        "event-alamat": { "customText": document.getElementById('alamatResepsi').value.trim() }
+    };
+
+    // 4. Lakukan Upsert ke tabel invitation_designs
+    const { error: designError } = await supabaseClient
+        .from('invitation_designs')
+        .upsert({
+            design_id: savedData.url_undangan,
+            design_data: designData,
+            updated_at: new Date().toISOString()
+        }, { onConflict: 'design_id' });
+
+    if (designError) {
+        console.error("Gagal menyimpan data desain undangan:", designError);
+    }
+}
         
         if (!savedData || !savedData.url_undangan) {
             throw new Error("Gagal mengambil atau membuat URL Undangan dari database.");
@@ -1691,14 +1768,33 @@ async function generateWebLinkAndQR() {
         new QRCode(qrContainer, { text: finalUrl, width: 500, height: 500, colorDark: "#0A1128", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
 
         setTimeout(() => {
-            const canvas = qrContainer.querySelector('canvas');
-            if (canvas) {
-                const a = Object.assign(document.createElement('a'), { href: canvas.toDataURL("image/png"), download: `QR_Undangan_${savedData.url_undangan}.png` });
+            const originalCanvas = qrContainer.querySelector('canvas');
+            if (originalCanvas) {
+                // Membuat canvas baru dengan ukuran lebih besar untuk pinggiran putih
+                const padding = 40; // Lebar pinggiran putih dalam pixel (bisa disesuaikan)
+                const newCanvas = document.createElement('canvas');
+                newCanvas.width = originalCanvas.width + (padding * 2);
+                newCanvas.height = originalCanvas.height + (padding * 2);
+                
+                const ctx = newCanvas.getContext('2d');
+                
+                // Isi background canvas baru dengan warna putih
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+                
+                // Gambar QR Code asli ke posisi tengah canvas baru
+                ctx.drawImage(originalCanvas, padding, padding);
+
+                // Unduh hasil dari canvas yang baru (yang sudah memiliki pinggiran)
+                const a = Object.assign(document.createElement('a'), { 
+                    href: newCanvas.toDataURL("image/png"), 
+                    download: `QR_Undangan_${savedData.url_undangan}.png` 
+                });
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
             }
-        }, 800); 
+        }, 800);
 
     } catch (err) {
         console.error(err);
@@ -1787,9 +1883,23 @@ async function uploadPdfToDrive() {
             return text;
         }
 
-        function formatTeksWaktu(waktuVal) {
+    function formatTeksWaktu(waktuVal) {
             if (!waktuVal) return "";
-            let wkt = waktuVal.toLowerCase().includes("pukul") ? waktuVal : `Pukul ${waktuVal}`;
+            
+            // 1. Ubah format dari HH:MM menjadi HH.MM (contoh: 16:00 -> 16.00)
+            let wkt = waktuVal.replace(/(\d{1,2}):(\d{2})/g, '$1.$2');
+
+            // 2. Tambahkan "Wita" jika tidak ada keterangan zona waktu
+            if (!/wita|wit|wib/i.test(wkt)) {
+                // Sisipkan "Wita" tepat setelah pola angka jam (misal setelah 16.00)
+                if (/(\d{1,2}\.\d{2})/.test(wkt)) {
+                    wkt = wkt.replace(/(\d{1,2}\.\d{2})/, '$1 Wita');
+                } else {
+                    wkt += " Wita"; // Fallback jika tidak ada pola jam yang spesifik
+                }
+            }
+
+            wkt = wkt.toLowerCase().includes("pukul") ? wkt : `Pukul ${wkt}`;
             
             return wkt.split(/\s+/).map(w => {
                 if (!w) return "";
@@ -1799,7 +1909,7 @@ async function uploadPdfToDrive() {
             }).join(' ');
         }
 
-        function generateText() {
+  function generateText() {
             const susunan = document.getElementById('susunan').value;
             
             const wNamaLengkap = document.getElementById('wPanggilan').value.trim() ? (document.getElementById('wNama').value.trim() ? `${document.getElementById('wNama').value.trim()} (${document.getElementById('wPanggilan').value.trim()})` : `(${document.getElementById('wPanggilan').value.trim()})`) : document.getElementById('wNama').value.trim();
@@ -1821,24 +1931,49 @@ async function uploadPdfToDrive() {
             let jamAkadText = formatTeksWaktu(document.getElementById('jamAkad').value.trim());
             let jamResepsiText = formatTeksWaktu(document.getElementById('jamResepsi').value.trim());
 
+            // Tambahkan baris penangkap teksAyat ini:
+            const teksAyat = document.getElementById('teksAyat') ? document.getElementById('teksAyat').value.trim() : "";
+            
             const teksPembuka = document.getElementById('teksPembuka').value;
             const teksPenutup = document.getElementById('teksPenutup').value;
-            const teksPengantarAcara = document.getElementById('teksPengantarAcara').value; 
-            
+            const teksPengantarAcara = document.getElementById('teksPengantarAcara').value;
+
             const jenis = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
             const judulAkad = (jenis === 'kristen') ? 'PEMBERKATAN' : 'AKAD NIKAH';
 
-            let resBlock = `Hari/Tanggal: ${document.getElementById('tanggalResepsi').value.trim()}`;
+            // --- Logika Susunan Blok Akad ---
+            let akadBlock = `${judulAkad}\nHari/Tanggal: ${document.getElementById('tanggalAkad').value.trim()}`;
+            if (jamAkadText) akadBlock += `\n${jamAkadText}`;
             
+            const tempatAkad = document.getElementById('tempatAkad').value.trim();
+            const alamatAkad = document.getElementById('alamatAkad').value.trim();
+            
+            if (tempatAkad || alamatAkad) {
+                akadBlock += `\nBertempat di`;
+                if (tempatAkad) akadBlock += `\n${tempatAkad}`;
+                if (alamatAkad) akadBlock += `\n${alamatAkad}`;
+            }
+
+            // --- Logika Susunan Blok Resepsi ---
+            let resBlock = `Hari/Tanggal: ${document.getElementById('tanggalResepsi').value.trim()}`;
             if (ketOrderIndex === 1 && ket) resBlock += `\n${ket}`;
             if (jamResepsiText) resBlock += `\n${jamResepsiText}`;
             if (ketOrderIndex === 2 && ket) resBlock += `\n${ket}`;
-            resBlock += `\nBertempat di\n${document.getElementById('tempatResepsi').value.trim()}`;
-            if (ketOrderIndex === 3 && ket) resBlock += `\n${ket}`;
-            resBlock += `\n${document.getElementById('alamatResepsi').value.trim()}`;
+            
+            const tempatResepsi = document.getElementById('tempatResepsi').value.trim();
+            const alamatResepsi = document.getElementById('alamatResepsi').value.trim();
+
+            if (tempatResepsi || alamatResepsi) {
+                resBlock += `\nBertempat di`;
+                if (tempatResepsi) resBlock += `\n${tempatResepsi}`;
+                if (ketOrderIndex === 3 && ket) resBlock += `\n${ket}`;
+                if (alamatResepsi) resBlock += `\n${alamatResepsi}`;
+            } else {
+                if (ketOrderIndex === 3 && ket) resBlock += `\n${ket}`;
+            }
             if (ketOrderIndex === 4 && ket) resBlock += `\n${ket}`;
 
-            document.getElementById('previewText').value = `${teksPembuka}
+            document.getElementById('previewText').value = `${teksAyat ? teksAyat + '\n\n' : ''}${teksPembuka}
 
 ${block1}
 
@@ -1848,12 +1983,7 @@ ${block2}
 
 ${teksPengantarAcara}
 
-${judulAkad}
-Hari/Tanggal: ${document.getElementById('tanggalAkad').value.trim()}
-${jamAkadText}
-Bertempat di
-${document.getElementById('tempatAkad').value.trim()}
-${document.getElementById('alamatAkad').value.trim()}
+${akadBlock}
 
 RESEPSI
 ${resBlock}
@@ -1921,17 +2051,36 @@ ${turutMengundangText}`;
             }
         }
 
-        function copyAlamatAkad() { 
+function copyAlamatAkad() { 
             const tempat = getVal('tempatAkad');
             const alamat = getVal('alamatAkad');
-            (tempat || alamat) ? executeCopy(`Bertempat di\n${tempat}\n${alamat}`) : showModal("Lokasi Akad/Pemberkatan masih kosong."); 
+            
+            if (!tempat && !alamat) {
+                showModal("Lokasi Akad/Pemberkatan masih kosong.");
+                return;
+            }
+            
+            let teks = "Bertempat di";
+            if (tempat) teks += `\n${tempat}`;
+            if (alamat) teks += `\n${alamat}`;
+            executeCopy(teks); 
         }
 
         function copyAlamatResepsi() { 
             const tempat = getVal('tempatResepsi');
             const alamat = getVal('alamatResepsi');
-            (tempat || alamat) ? executeCopy(`Bertempat di\n${tempat}\n${alamat}`) : showModal("Lokasi Resepsi masih kosong."); 
+            
+            if (!tempat && !alamat) {
+                showModal("Lokasi Resepsi masih kosong.");
+                return;
+            }
+            
+            let teks = "Bertempat di";
+            if (tempat) teks += `\n${tempat}`;
+            if (alamat) teks += `\n${alamat}`;
+            executeCopy(teks); 
         }
+
 
         function copyResepsiTanggalSaja() { 
             const p = parseDateString(getVal('tanggalResepsi')); 
