@@ -387,65 +387,128 @@ dan selalu mengumpulkan kalian berdua dalam kebaikan."
                 </h2>
                 
                 <div class="flex flex-col gap-4">
-                    <button onclick="copyFullText()" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-gold-500/20 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
+                    <button id="btnCopyFullText" onclick="copyFullText()" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-gold-500/20 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:from-gold-700 disabled:hover:to-gold-500 disabled:active:scale-100">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Salin Semua Teks
                     </button>
 
-                    <button onclick="copyCorelFileName()" class="w-full bg-dark-700 hover:bg-dark-600 border border-blue-500/40 text-blue-300 font-semibold py-3 px-4 rounded-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                        Salin Nama File Corel
-                    </button>
+                    <!-- Nama File Corel -->
+                    <div class="bg-dark-900/60 border border-blue-500/25 rounded-lg p-2.5 flex flex-col gap-2">
+                        <div id="preview-copy-corel" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-blue-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                        <button id="btnCopyCorel" onclick="copyCorelFileName()" class="w-full bg-dark-700 hover:bg-dark-600 border border-blue-500/40 text-blue-300 font-semibold py-2.5 px-4 rounded-md shadow transition-all duration-200 flex items-center justify-center gap-2 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                            Salin Nama File Corel
+                        </button>
+                    </div>
                     
-                    <div id="copyButtonsContainer" class="flex flex-col gap-2 md:gap-3">
+                    <!-- Nama Pengantin dan Ortu -->
+                    <div id="copyButtonsContainer" class="flex flex-col gap-3">
                         <h3 class="text-gold-500 font-serif text-sm border-b border-gold-500/20 pb-1 mt-2">Nama Pengantin dan Ortu</h3>
-                        <div id="btnGroupMempelai" class="flex flex-col gap-2 md:gap-3">
-                            <div id="btnGroupWanita" class="grid grid-cols-2 gap-2 md:gap-3 order-1 transition-all duration-300">
-                                <button onclick="copyBrideName()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Nama Wanita</button>
-                                <button onclick="copyBrideParent()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Ortu Wanita</button>
+                        <div id="btnGroupMempelai" class="flex flex-col gap-3">
+                            <div id="btnGroupWanita" class="flex flex-col gap-3 order-1 transition-all duration-300">
+                                <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                    <div id="preview-copy-wNama" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                    <button onclick="copyBrideName()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Nama Wanita</button>
+                                </div>
+                                <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                    <div id="preview-copy-wParent" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                    <button onclick="copyBrideParent()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Ortu Wanita</button>
+                                </div>
                             </div>
                             
-                            <div id="btnGroupPria" class="grid grid-cols-2 gap-2 md:gap-3 order-2 transition-all duration-300">
-                                <button onclick="copyGroomName()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Nama Pria</button>
-                                <button onclick="copyGroomParent()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Ortu Pria</button>
+                            <div id="btnGroupPria" class="flex flex-col gap-3 order-2 transition-all duration-300">
+                                <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                    <div id="preview-copy-pNama" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                    <button onclick="copyGroomName()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Nama Pria</button>
+                                </div>
+                                <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                    <div id="preview-copy-pParent" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                    <button onclick="copyGroomParent()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Ortu Pria</button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex flex-col gap-2 md:gap-3">
+                    <!-- Akad -->
+                    <div class="flex flex-col gap-3">
                         <h3 class="text-gold-500 font-serif text-sm border-b border-gold-500/20 pb-1 mt-2">Akad</h3>
-                        <div class="grid grid-cols-2 gap-2 md:gap-3">
-                            <button onclick="copyTglDanWaktuAkad()" class="col-span-2 bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tgl dan Waktu Akad</button>
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-tglWaktuAkad" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button onclick="copyTglDanWaktuAkad()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Tgl dan Waktu Akad</button>
+                            </div>
                             
-                            <button id="btnCopyTglAkad" onclick="copyTanggalAkad()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tgl Akad (Full)</button>
-                            <button id="btnCopyWaktuAkad" onclick="copyAkadTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Waktu Akad</button>
+                            <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-tanggalAkad" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button id="btnCopyTglAkad" onclick="copyTanggalAkad()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Tgl Akad (Full)</button>
+                            </div>
+
+                            <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-jamAkad" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button id="btnCopyWaktuAkad" onclick="copyAkadTime()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Waktu Akad</button>
+                            </div>
                             
-                            <button id="btnCopyLokasiAkad" onclick="copyAlamatAkad()" class="col-span-2 bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Lokasi Akad</button>
+                            <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-alamatAkad" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button id="btnCopyLokasiAkad" onclick="copyAlamatAkad()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Lokasi Akad</button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="flex flex-col gap-2 md:gap-3">
+                    <!-- Resepsi -->
+                    <div class="flex flex-col gap-3">
                         <h3 class="text-gold-500 font-serif text-sm border-b border-gold-500/20 pb-1 mt-2">Resepsi</h3>
-                        <div class="grid grid-cols-2 gap-2 md:gap-3">
-                            <button onclick="copyTanggalResepsi()" class="col-span-2 bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tgl Resepsi (Full)</button>
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-tanggalResepsi" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button onclick="copyTanggalResepsi()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Tgl Resepsi (Full)</button>
+                            </div>
                             
-                            <button onclick="copyHariResepsi()" class="bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Hari Resepsi</button>
-                            <button onclick="copyResepsiTanggalSaja()" class="bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tgl Resepsi (Angka)</button>
+                            <div class="bg-dark-900/60 border border-blue-500/25 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-hariResepsi" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-blue-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button onclick="copyHariResepsi()" class="w-full bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Hari Resepsi</button>
+                            </div>
+
+                            <div class="bg-dark-900/60 border border-blue-500/25 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-tglAngkaResepsi" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-blue-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button onclick="copyResepsiTanggalSaja()" class="w-full bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Tgl Resepsi (Angka)</button>
+                            </div>
                             
-                            <button onclick="copyResepsiBulanTahun()" class="col-span-2 bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Bulan dan Tahun Resepsi</button>
+                            <div class="bg-dark-900/60 border border-blue-500/25 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-bulanTahunResepsi" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-blue-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button onclick="copyResepsiBulanTahun()" class="w-full bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Bulan dan Tahun Resepsi</button>
+                            </div>
                             
-                            <button onclick="copyKeteranganResepsi()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Ket. Resepsi</button>
-                            <button onclick="copyResepsiTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Waktu Resepsi</button>
+                            <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-ketResepsi" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button onclick="copyKeteranganResepsi()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Ket. Resepsi</button>
+                            </div>
+
+                            <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-jamResepsi" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button onclick="copyResepsiTime()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Waktu Resepsi</button>
+                            </div>
                             
-                            <button onclick="copyAlamatResepsi()" class="col-span-2 bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Lokasi Resepsi</button>
+                            <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-alamatResepsi" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button onclick="copyAlamatResepsi()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Lokasi Resepsi</button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="flex flex-col gap-2 md:gap-3">
+                    <!-- Nama yang Mengundang -->
+                    <div class="flex flex-col gap-3">
                         <h3 class="text-gold-500 font-serif text-sm border-b border-gold-500/20 pb-1 mt-2">Nama yang Mengundang</h3>
-                        <div class="grid grid-cols-2 gap-2 md:gap-3">
-                            <button onclick="copyHostName()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Nama Pengundang</button>
-                            <button onclick="copyTurutMengundang()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Turut Mengundang</button>
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-hostName" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button onclick="copyHostName()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Nama Pengundang</button>
+                            </div>
+
+                            <div class="bg-dark-900/60 border border-gold-500/20 rounded-lg p-2.5 flex flex-col gap-2">
+                                <div id="preview-copy-turutMengundang" class="w-full bg-dark-900 border border-white/5 rounded-md px-3 py-2 text-xs text-gray-200 font-mono whitespace-pre-line break-words leading-relaxed"></div>
+                                <button onclick="copyTurutMengundang()" class="w-full bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 font-medium py-2 px-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5 text-xs active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-dark-700 disabled:active:scale-100">Salin Turut Mengundang</button>
+                            </div>
                         </div>
                     </div>
 
@@ -470,8 +533,8 @@ dan selalu mengumpulkan kalian berdua dalam kebaikan."
    <!-- Modal & Toast -->
     <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 bg-green-600 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg shadow-2xl flex items-center gap-3 md:gap-4 transition-all duration-300 z-50 pointer-events-none w-max max-w-[90vw] text-sm md:text-base border border-green-500/50">
         <div class="flex flex-col gap-0.5">
-            <span class="font-medium text-green-100">Berhasil ✓</span>
-           <span id="toast-message" class="text-xs text-white opacity-90 break-words"></span>
+            <span id="toast-title" class="font-medium text-green-100">Berhasil ✓</span>
+            <span id="toast-message" class="text-xs text-white opacity-90 break-words"></span>
         </div>
     </div>
 
@@ -541,35 +604,34 @@ dan selalu mengumpulkan kalian berdua dalam kebaikan."
             </h3>
             
             <form id="editProfileForm" onsubmit="handleEditProfile(event)">
-    <div class="space-y-3">
-        <div class="input-group mb-0">
-            <label class="input-label" for="editNamaPercetakan">Nama Percetakan</label>
-            <input type="text" id="editNamaPercetakan" class="input-field" required>
-        </div>
-        <div class="input-group mb-0">
-            <label class="input-label" for="editWa">Nomor WhatsApp</label>
-            <input type="text" id="editWa" class="input-field" required>
-        </div>
-        <div class="input-group mb-0 relative">
-            <label class="input-label" for="editPassword">Password Baru <span class="text-[10px] text-gray-500 normal-case ml-1">(Kosongkan jika tidak diubah)</span></label>
-            <input type="password" id="editPassword" class="input-field pr-10" placeholder="Password baru">
-            <button type="button" onclick="togglePasswordVisibility('editPassword', 'eyeIconEdit')" class="absolute right-3 top-[26px] text-gray-400 hover:text-gold-500 focus:outline-none">
-                <svg id="eyeIconEdit" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            </button>
-        </div>
-        
-        <!-- TAMBAHAN: Kolom Konfirmasi Password -->
-        <div class="input-group mb-0 relative">
-            <label class="input-label" for="editConfirmPassword">Konfirmasi Password Baru</label>
-            <input type="password" id="editConfirmPassword" class="input-field pr-10" placeholder="Ulangi password baru">
-            <button type="button" onclick="togglePasswordVisibility('editConfirmPassword', 'eyeIconEditConfirm')" class="absolute right-3 top-[26px] text-gray-400 hover:text-gold-500 focus:outline-none">
-                <svg id="eyeIconEditConfirm" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            </button>
-        </div>
-    </div>
-    
-    <button type="submit" id="editProfileSubmitBtn" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-2.5 rounded-lg transition-all shadow-lg active:scale-95 mt-6">Simpan Perubahan</button>
-</form>
+                <div class="space-y-3">
+                    <div class="input-group mb-0">
+                        <label class="input-label" for="editNamaPercetakan">Nama Percetakan</label>
+                        <input type="text" id="editNamaPercetakan" class="input-field" required>
+                    </div>
+                    <div class="input-group mb-0">
+                        <label class="input-label" for="editWa">Nomor WhatsApp</label>
+                        <input type="text" id="editWa" class="input-field" required>
+                    </div>
+                    <div class="input-group mb-0 relative">
+                        <label class="input-label" for="editPassword">Password Baru <span class="text-[10px] text-gray-500 normal-case ml-1">(Kosongkan jika tidak diubah)</span></label>
+                        <input type="password" id="editPassword" class="input-field pr-10" placeholder="Password baru">
+                        <button type="button" onclick="togglePasswordVisibility('editPassword', 'eyeIconEdit')" class="absolute right-3 top-[26px] text-gray-400 hover:text-gold-500 focus:outline-none">
+                            <svg id="eyeIconEdit" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="input-group mb-0 relative">
+                        <label class="input-label" for="editConfirmPassword">Konfirmasi Password Baru</label>
+                        <input type="password" id="editConfirmPassword" class="input-field pr-10" placeholder="Ulangi password baru">
+                        <button type="button" onclick="togglePasswordVisibility('editConfirmPassword', 'eyeIconEditConfirm')" class="absolute right-3 top-[26px] text-gray-400 hover:text-gold-500 focus:outline-none">
+                            <svg id="eyeIconEditConfirm" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" id="editProfileSubmitBtn" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-2.5 rounded-lg transition-all shadow-lg active:scale-95 mt-6">Simpan Perubahan</button>
+            </form>
             
             <button onclick="closeEditProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors" title="Tutup">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -621,8 +683,7 @@ dan selalu mengumpulkan kalian berdua dalam kebaikan."
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFubmFjY2tveWZ6cm12b2J3Y2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwOTIxNTEsImV4cCI6MjEwNzY2ODE1MX0.XbLOSpq1ylDjkxrDqoQBJIFAZp6RhsDiCiXn6kF9NjA";
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // DAFTAR FIELD (namaPercetakan & usernamePercetakan telah dihapus)
-      const fieldIds = [
+        const fieldIds = [
             'kodeUndangan', 'jumlahUndangan',
             'jenisUndangan', 'susunan', 'wNama', 'wPanggilan', 'wAnak', 'wBapak', 'wIbu', 
             'pNama', 'pPanggilan', 'pAnak', 'pBapak', 'pIbu', 
@@ -664,7 +725,7 @@ dan selalu mengumpulkan kalian berdua dalam kebaikan."
 
         // --- MANAJEMEN AUTENTIKASI LOGIN / SIGNUP ---
         let isSignUp = false;
-let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
+        let waRealtimeChannel = null;
 
         function renderAuth() {
             const userStr = localStorage.getItem('user_percetakan');
@@ -683,7 +744,6 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                     <button onclick="handleLogout()" class="bg-red-900/80 hover:bg-red-700 text-white text-[10px] md:text-xs py-1.5 px-3 rounded-lg border border-red-500/30 transition-all shadow-lg active:scale-95">Logout</button>
                 `;
                 
-                // Jalankan sistem Realtime
                 initWaRealtimeCounter(user.username);
                 
             } else {
@@ -709,7 +769,7 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
             setTimeout(() => {
                 modal.classList.add('hidden');
                 document.getElementById('authForm').reset();
-                if (isSignUp) toggleAuthMode(); // Kembalikan ke mode login
+                if (isSignUp) toggleAuthMode();
             }, 300);
         }
 
@@ -748,102 +808,95 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
             
             if (input.type === "password") {
                 input.type = "text";
-                icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`; // Icon mata dicoret
+                icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
             } else {
                 input.type = "password";
-                icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`; // Icon mata biasa
+                icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
             }
         }
 
-      async function handleAuth(e) {
-    e.preventDefault();
-    const username = document.getElementById('authUsername').value.trim().toLowerCase().replace(/\s+/g, '');
-    const password = document.getElementById('authPassword').value;
-    const btn = document.getElementById('authSubmitBtn');
-    const originalText = btn.textContent;
-    
-    btn.textContent = 'Memproses...';
-    btn.disabled = true;
-
-    try {
-        if (isSignUp) {
-            const nama = document.getElementById('authNamaPercetakan').value.trim();
-            let no_wa = document.getElementById('authWa').value.trim();
-            const confirmPassword = document.getElementById('authConfirmPassword').value;
-
-            // --- FORMAT NOMOR WA ---
-            // Hapus semua karakter selain angka (seperti spasi, strip, atau tanda +)
-            no_wa = no_wa.replace(/\D/g, ''); 
-            // Jika diawali dengan angka 0, ubah menjadi 62
-            if (no_wa.startsWith('0')) {
-                no_wa = '62' + no_wa.slice(1);
-            }
-
-            if (password !== confirmPassword) {
-                showModal("Gagal: Konfirmasi password tidak sesuai!");
-                return;
-            }
-
-            // Pengecekan username
-            const { data: existingUser } = await supabaseClient
-                .from('percetakan')
-                .select('username')
-                .eq('username', username)
-                .limit(1);
-
-            if (existingUser && existingUser.length > 0) {
-                showModal("Gagal: Username sudah terdaftar, silakan pilih yang lain.");
-                return;
-            }
-
-            // Pendaftaran
-            const { data, error } = await supabaseClient
-                .from('percetakan')
-                .insert([{ username: username, nama: nama, password: password, no_wa: no_wa }])
-                .select();
-
-            if (error) throw error;
-
-            localStorage.setItem('user_percetakan', JSON.stringify({ username: data[0].username, nama: data[0].nama }));
-            showToast("Pendaftaran dan login berhasil!");
-            closeAuthModal();
-            renderAuth();
-
-        } else {
-            // Login
-            const { data, error } = await supabaseClient
-                .from('percetakan')
-                .select('username, nama, password')
-                .eq('username', username)
-                .single();
-
-            if (error || !data) {
-                showModal("Gagal: Username tidak ditemukan.");
-                return;
-            }
+        async function handleAuth(e) {
+            e.preventDefault();
+            const username = document.getElementById('authUsername').value.trim().toLowerCase().replace(/\s+/g, '');
+            const password = document.getElementById('authPassword').value;
+            const btn = document.getElementById('authSubmitBtn');
+            const originalText = btn.textContent;
             
-            if (data.password !== password) {
-                showModal("Gagal: Password Anda salah!");
-                return;
+            btn.textContent = 'Memproses...';
+            btn.disabled = true;
+
+            try {
+                if (isSignUp) {
+                    const nama = document.getElementById('authNamaPercetakan').value.trim();
+                    let no_wa = document.getElementById('authWa').value.trim();
+                    const confirmPassword = document.getElementById('authConfirmPassword').value;
+
+                    no_wa = no_wa.replace(/\D/g, ''); 
+                    if (no_wa.startsWith('0')) {
+                        no_wa = '62' + no_wa.slice(1);
+                    }
+
+                    if (password !== confirmPassword) {
+                        showModal("Gagal: Konfirmasi password tidak sesuai!");
+                        return;
+                    }
+
+                    const { data: existingUser } = await supabaseClient
+                        .from('percetakan')
+                        .select('username')
+                        .eq('username', username)
+                        .limit(1);
+
+                    if (existingUser && existingUser.length > 0) {
+                        showModal("Gagal: Username sudah terdaftar, silakan pilih yang lain.");
+                        return;
+                    }
+
+                    const { data, error } = await supabaseClient
+                        .from('percetakan')
+                        .insert([{ username: username, nama: nama, password: password, no_wa: no_wa }])
+                        .select();
+
+                    if (error) throw error;
+
+                    localStorage.setItem('user_percetakan', JSON.stringify({ username: data[0].username, nama: data[0].nama }));
+                    showToast("Pendaftaran dan login berhasil!");
+                    closeAuthModal();
+                    renderAuth();
+
+                } else {
+                    const { data, error } = await supabaseClient
+                        .from('percetakan')
+                        .select('username, nama, password')
+                        .eq('username', username)
+                        .single();
+
+                    if (error || !data) {
+                        showModal("Gagal: Username tidak ditemukan.");
+                        return;
+                    }
+                    
+                    if (data.password !== password) {
+                        showModal("Gagal: Password Anda salah!");
+                        return;
+                    }
+
+                    localStorage.setItem('user_percetakan', JSON.stringify({ username: data.username, nama: data.nama }));
+                    showToast(`Selamat datang, ${data.nama}!`);
+                    closeAuthModal();
+                    renderAuth();
+                }
+            } catch (error) {
+                console.error("Autentikasi bermasalah:", error);
+                showModal("Terjadi kesalahan pada sistem autentikasi. Silakan coba lagi.");
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
             }
-
-            localStorage.setItem('user_percetakan', JSON.stringify({ username: data.username, nama: data.nama }));
-            showToast(`Selamat datang, ${data.nama}!`);
-            closeAuthModal();
-            renderAuth();
         }
-    } catch (error) {
-        console.error("Autentikasi bermasalah:", error);
-        showModal("Terjadi kesalahan pada sistem autentikasi. Silakan coba lagi.");
-    } finally {
-        btn.textContent = originalText;
-        btn.disabled = false;
-    }
-}
 
-       function handleLogout() {
+        function handleLogout() {
             localStorage.removeItem('user_percetakan');
-            // Putuskan koneksi realtime saat logout agar tidak memberatkan browser
             if (waRealtimeChannel) {
                 supabaseClient.removeChannel(waRealtimeChannel);
                 waRealtimeChannel = null;
@@ -852,49 +905,48 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
             renderAuth();
         }
 
-     async function openEditProfileModal() {
-    const userStr = localStorage.getItem('user_percetakan');
-    if (!userStr) return;
-    const user = JSON.parse(userStr);
+        async function openEditProfileModal() {
+            const userStr = localStorage.getItem('user_percetakan');
+            if (!userStr) return;
+            const user = JSON.parse(userStr);
 
-    const btn = document.getElementById('editProfileSubmitBtn');
-    btn.textContent = 'Memuat Data...';
-    btn.disabled = true;
+            const btn = document.getElementById('editProfileSubmitBtn');
+            btn.textContent = 'Memuat Data...';
+            btn.disabled = true;
 
-    const modal = document.getElementById('editProfileModal');
-    modal.classList.remove('hidden');
-    setTimeout(() => {
-        modal.classList.remove('opacity-0', 'pointer-events-none');
-        document.getElementById('editProfileModalContent').classList.replace('scale-95', 'scale-100');
-    }, 10);
+            const modal = document.getElementById('editProfileModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                document.getElementById('editProfileModalContent').classList.replace('scale-95', 'scale-100');
+            }, 10);
 
-    try {
-        const { data, error } = await supabaseClient
-            .from('percetakan')
-            .select('nama, no_wa')
-            .eq('username', user.username)
-            .single();
+            try {
+                const { data, error } = await supabaseClient
+                    .from('percetakan')
+                    .select('nama, no_wa')
+                    .eq('username', user.username)
+                    .single();
 
-        if (data) {
-            document.getElementById('editNamaPercetakan').value = data.nama || '';
-            
-            let displayWa = data.no_wa || '';
-            if (displayWa.startsWith('62')) {
-                displayWa = '0' + displayWa.substring(2);
+                if (data) {
+                    document.getElementById('editNamaPercetakan').value = data.nama || '';
+                    
+                    let displayWa = data.no_wa || '';
+                    if (displayWa.startsWith('62')) {
+                        displayWa = '0' + displayWa.substring(2);
+                    }
+                    document.getElementById('editWa').value = displayWa;
+                }
+            } catch (err) {
+                console.error("Gagal memuat profil:", err);
+            } finally {
+                document.getElementById('editPassword').value = '';
+                document.getElementById('editConfirmPassword').value = '';
+                btn.textContent = 'Simpan Perubahan';
+                btn.disabled = false;
             }
-            document.getElementById('editWa').value = displayWa;
         }
-    } catch (err) {
-        console.error("Gagal memuat profil:", err);
-    } finally {
-        document.getElementById('editPassword').value = '';
-        document.getElementById('editConfirmPassword').value = ''; // Kosongkan form konfirmasi
-        btn.textContent = 'Simpan Perubahan';
-        btn.disabled = false;
-    }
-}
 
-// --- FUNGSI DOWNLOAD DATA WA KE EXCEL (UPDATED) ---
         async function downloadWaData() {
             const userStr = localStorage.getItem('user_percetakan');
             if (!userStr) return;
@@ -903,21 +955,14 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
             const btn = document.getElementById('btnDownloadWa');
             const originalHtml = btn.innerHTML;
             
-            // Ubah state tombol saat loading
             btn.innerHTML = 'Memuat...';
             btn.disabled = true;
 
             try {
-               // TAHAP 1: Ambil semua data undangan milik percetakan yang login
-                console.log("User Login saat ini:", user.username);
-
                 const { data: undanganData, error: errUndangan } = await supabaseClient
                     .from('data_undangan')
                     .select('id, url_undangan')
                     .eq('usernamePercetakan', user.username);
-
-                console.log("Error Undangan:", errUndangan);
-                console.log("Data Undangan yang didapat:", undanganData);
 
                 if (errUndangan) throw errUndangan;
 
@@ -926,10 +971,8 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                     return;
                 }
 
-                // Ekstrak semua ID undangan milik percetakan ini
                 const weddingIds = undanganData.map(u => u.id);
 
-                // TAHAP 2: Ambil nomor WA yang memiliki wedding_id dari daftar di atas
                 const { data: waData, error: errWa } = await supabaseClient
                     .from('pengingat_wa')
                     .select('nomor_wa, created_at, wedding_id')
@@ -943,7 +986,6 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                     return;
                 }
 
-                // TAHAP 3: Gabungkan dan format data untuk Excel
                 const excelData = waData.map((item, index) => {
                     const undangan = undanganData.find(u => u.id === item.wedding_id);
                     
@@ -959,13 +1001,12 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                     };
                 });
 
-                // Proses generate Excel (XLSX)
                 const ws = XLSX.utils.json_to_sheet(excelData);
                 ws['!cols'] = [
-                    { wch: 5 },  // No
-                    { wch: 20 }, // Nomor WhatsApp
-                    { wch: 50 }, // URL Undangan
-                    { wch: 25 }  // Tanggal
+                    { wch: 5 },
+                    { wch: 20 },
+                    { wch: 50 },
+                    { wch: 25 }
                 ];
                 
                 const wb = XLSX.utils.book_new();
@@ -980,19 +1021,16 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                 console.error("Gagal mengunduh data WA:", err);
                 showModal("Terjadi kesalahan saat mengambil data dari server. Pastikan koneksi internet stabil.");
             } finally {
-                // Kembalikan state tombol
                 btn.innerHTML = originalHtml;
                 btn.disabled = false;
             }
         }
 
-        // --- SISTEM SUPABASE REALTIME UNTUK COUNTER NOMOR WA ---
         let currentWaCount = 0;
         let userWeddingIds = [];
 
         async function initWaRealtimeCounter(username) {
             try {
-                // 1. Ambil daftar ID undangan milik percetakan yang sedang login
                 const { data: undanganData } = await supabaseClient
                     .from('data_undangan')
                     .select('id')
@@ -1001,7 +1039,6 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                 if (!undanganData || undanganData.length === 0) return;
                 userWeddingIds = undanganData.map(u => u.id);
                 
-                // 2. Hitung jumlah nomor WA saat ini
                 const { count } = await supabaseClient
                     .from('pengingat_wa')
                     .select('*', { count: 'exact', head: true })
@@ -1010,7 +1047,6 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                 currentWaCount = count || 0;
                 updateWaButtonUI();
                 
-                // 3. Daftarkan Supabase Realtime Listener (Mendengarkan data baru masuk)
                 if (waRealtimeChannel) supabaseClient.removeChannel(waRealtimeChannel);
                 
                 waRealtimeChannel = supabaseClient.channel('custom-wa-channel')
@@ -1018,10 +1054,9 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                         'postgres_changes', 
                         { event: 'INSERT', schema: 'public', table: 'pengingat_wa' }, 
                         (payload) => {
-                            // Cek apakah nomor WA yang baru masuk adalah milik undangan dari percetakan ini
                             if (userWeddingIds.includes(payload.new.wedding_id)) {
                                 currentWaCount++;
-                                updateWaButtonUI(true); // true = mainkan animasi
+                                updateWaButtonUI(true);
                             }
                         }
                     )
@@ -1040,9 +1075,8 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                 spanEl.textContent = `Data WA (${currentWaCount})`;
             }
             
-            // Berikan efek kedip hijau dan toast ketika ada nomor baru masuk
             if (isNewData && btnEl) {
-                btnEl.classList.add('bg-green-500', 'scale-105'); // Animasi membesar
+                btnEl.classList.add('bg-green-500', 'scale-105');
                 showToast(`🔔 Ada ${currentWaCount} Nomor WA yang telah terdaftar!`);
                 
                 setTimeout(() => {
@@ -1061,69 +1095,67 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
             }, 300);
         }
 
-  async function handleEditProfile(e) {
-    e.preventDefault();
-    const userStr = localStorage.getItem('user_percetakan');
-    if (!userStr) return;
-    const user = JSON.parse(userStr);
+        async function handleEditProfile(e) {
+            e.preventDefault();
+            const userStr = localStorage.getItem('user_percetakan');
+            if (!userStr) return;
+            const user = JSON.parse(userStr);
 
-    const btn = document.getElementById('editProfileSubmitBtn');
-    const originalText = btn.textContent;
-    btn.textContent = 'Menyimpan...';
-    btn.disabled = true;
+            const btn = document.getElementById('editProfileSubmitBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Menyimpan...';
+            btn.disabled = true;
 
-    const newNama = document.getElementById('editNamaPercetakan').value.trim();
-    let newWa = document.getElementById('editWa').value.trim();
-    const newPassword = document.getElementById('editPassword').value;
-    const confirmPassword = document.getElementById('editConfirmPassword').value;
+            const newNama = document.getElementById('editNamaPercetakan').value.trim();
+            let newWa = document.getElementById('editWa').value.trim();
+            const newPassword = document.getElementById('editPassword').value;
+            const confirmPassword = document.getElementById('editConfirmPassword').value;
 
-    // --- CEK KONFIRMASI PASSWORD ---
-    if (newPassword && newPassword !== confirmPassword) {
-        showModal("Gagal: Konfirmasi password tidak sesuai!");
-        btn.textContent = originalText;
-        btn.disabled = false;
-        return; // Hentikan eksekusi jika password tidak cocok
-    }
+            if (newPassword && newPassword !== confirmPassword) {
+                showModal("Gagal: Konfirmasi password tidak sesuai!");
+                btn.textContent = originalText;
+                btn.disabled = false;
+                return;
+            }
 
-    // --- FORMAT NOMOR WA ---
-    newWa = newWa.replace(/\D/g, ''); 
-    if (newWa.startsWith('0')) {
-        newWa = '62' + newWa.slice(1);
-    }
+            newWa = newWa.replace(/\D/g, ''); 
+            if (newWa.startsWith('0')) {
+                newWa = '62' + newWa.slice(1);
+            }
 
-    try {
-        let updates = { nama: newNama, no_wa: newWa };
-        
-        if (newPassword) {
-            updates.password = newPassword;
+            try {
+                let updates = { nama: newNama, no_wa: newWa };
+                
+                if (newPassword) {
+                    updates.password = newPassword;
+                }
+
+                const { data, error } = await supabaseClient
+                    .from('percetakan')
+                    .update(updates)
+                    .eq('username', user.username)
+                    .select();
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    throw new Error("Data tidak ditemukan atau akses diblokir oleh sistem (RLS).");
+                }
+
+                localStorage.setItem('user_percetakan', JSON.stringify({ username: user.username, nama: newNama }));
+                
+                showToast("Profil berhasil diperbarui!");
+                closeEditProfileModal();
+                renderAuth(); 
+
+            } catch (error) {
+                console.error("Gagal update profil:", error);
+                showModal(`Gagal: ${error.message || 'Terjadi kesalahan saat memperbarui profil.'}`);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
         }
-
-        const { data, error } = await supabaseClient
-            .from('percetakan')
-            .update(updates)
-            .eq('username', user.username)
-            .select();
-
-        if (error) throw error;
-
-        if (!data || data.length === 0) {
-            throw new Error("Data tidak ditemukan atau akses diblokir oleh sistem (RLS).");
-        }
-
-        localStorage.setItem('user_percetakan', JSON.stringify({ username: user.username, nama: newNama }));
-        
-        showToast("Profil berhasil diperbarui!");
-        closeEditProfileModal();
-        renderAuth(); 
-
-    } catch (error) {
-        console.error("Gagal update profil:", error);
-        showModal(`Gagal: ${error.message || 'Terjadi kesalahan saat memperbarui profil.'}`);
-    } finally {
-        btn.textContent = originalText;
-        btn.disabled = false;
-    }
-}
 
         // --- SISTEM PELACAKAN DATA UNTUK DIRTY CHECKING & AUTO-SAVE SUPABASE ---
         let lastSavedData = {}; 
@@ -1140,8 +1172,7 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
             supabaseSessionId = generateUUID();
             localStorage.setItem('supabaseSessionId', supabaseSessionId);
         }
-        let supabaseDbId = null; // Menyimpan ID UUID bawaan dari tabel Supabase
-
+        let supabaseDbId = null;
 
         // --- MANAJEMEN POSISI KETERANGAN ---
         let ketOrderIndex = parseInt(localStorage.getItem('ketOrderIndex')) || 2; 
@@ -1167,7 +1198,7 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
             else if (ketOrderIndex === 4) wrap.classList.add('order-8');
         }
 
- function gantiJenisUndangan(resetText = true) {
+        function gantiJenisUndangan(resetText = true) {
             const jenis = document.getElementById('jenisUndangan').value;
             const lAkad = document.getElementById('labelAkadUtama');
             
@@ -1340,7 +1371,6 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                         localStorage.setItem('supabaseSessionId', supabaseSessionId);
                     }
                     
-                    // [BARU] Pulihkan UUID dari Supabase jika tersedia di dalam metadata PDF
                     if (data.id) {
                         supabaseDbId = data.id;
                     } else {
@@ -1411,6 +1441,7 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
                     btnGroupPria.classList.remove('order-1'); btnGroupPria.classList.add('order-2');
                 }
             }
+            updateCopyPreviews();
         }
         
         document.addEventListener('DOMContentLoaded', () => {
@@ -1452,13 +1483,13 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
         }
 
         function copyBrideParent() {
-            const text = getParentText('wanita', document.getElementById('wAnak').value, document.getElementById('wBapak').value, document.getElementById('wIbu').value);
+            const text = getBrideParentText();
             if (text) executeCopy(text);
             else showModal("Data orang tua mempelai wanita belum lengkap atau disembunyikan.");
         }
         
         function copyGroomParent() {
-            const text = getParentText('pria', document.getElementById('pAnak').value, document.getElementById('pBapak').value, document.getElementById('pIbu').value);
+            const text = getGroomParentText();
             if (text) executeCopy(text);
             else showModal("Data orang tua mempelai pria belum lengkap atau disembunyikan.");
         }
@@ -1548,325 +1579,296 @@ let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
             }, 200);
         }
 
-   // 1. Helper untuk mengambil username dari localStorage
-function getCurrentUsername() {
-    const userStr = localStorage.getItem('user_percetakan');
-    return userStr ? JSON.parse(userStr).username : null;
-}
-
-// 2. Helper untuk mengambil seluruh data form secara dinamis
-function getFormData() {
-    return fieldIds.reduce((acc, id) => {
-        const el = document.getElementById(id);
-        if (el) acc[id] = el.value;
-        return acc;
-    }, {});
-}
-
-// 3. Helper Utama: Membuat PDF (Menggabungkan logika dari WA & Drive)
-async function buildPdfBase() {
-    await saveToSupabaseSilently(); // Pastikan data tersimpan & dapat ID
-
-    const { PDFDocument, StandardFonts, rgb } = PDFLib;
-    const pdfDoc = await PDFDocument.create();
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    let page = pdfDoc.addPage();
-    
-    const data = getFormData();
-    const tanggalDibuat = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-    // Sisipkan metadata
-    data.tanggalDibuat = tanggalDibuat;
-    data.supabaseSessionId = supabaseSessionId;
-    if (supabaseDbId) data.id = supabaseDbId;
-    
-    const username = getCurrentUsername();
-    if (username) data.usernamePercetakan = username;
-
-    pdfDoc.setSubject(JSON.stringify(data));
-    pdfDoc.setTitle("Data Undangan - " + (data.wPanggilan || 'Mempelai'));
-
-    // Gambar teks ke PDF
-    const textToPrint = `Tanggal Pembuatan Data: ${tanggalDibuat}\n\n` + document.getElementById('previewText').value; 
-    let y = page.getHeight() - 50;
-    
-    for (let line of textToPrint.split('\n')) {
-        if (y < 50) {
-            page = pdfDoc.addPage();
-            y = page.getHeight() - 50;
-        }
-        const cleanLine = line.replace(/[^\x20-\x7E\xA0-\xFF]/g, '').substring(0, 90);
-        const isHeader = line.startsWith("Tanggal Pembuatan Data:");
-        page.drawText(cleanLine, { x: 50, y, size: isHeader ? 9 : 11, font, color: isHeader ? rgb(0.4,0.4,0.4) : rgb(0,0,0) });
-        y -= 16;
-    }
-
-    // Tentukan Nama File
-    const wNama = (data.wPanggilan || (data.wNama || '').split(' ')[0] || 'Wanita').trim();
-    const pNama = (data.pPanggilan || (data.pNama || '').split(' ')[0] || 'Pria').trim();
-    const namaFileGabungan = (data.susunan === 'pria' ? `${pNama}&${wNama}` : `${wNama}&${pNama}`).replace(/\s+/g, '');
-    
-    return {
-        blob: new Blob([await pdfDoc.save()], { type: "application/pdf" }),
-        fileName: `Data_Undangan_${namaFileGabungan}.pdf`
-    };
-}
-
-// --- 1. Fungsi Bantuan untuk Membuat URL (Slug) ---
-function generateUrlUndangan() {
-    const getSlug = (id) => {
-        const el = document.getElementById(id);
-        return el ? el.value.trim().toLowerCase().replace(/[^a-z0-9]/g, '') : '';
-    };
-    const panggilW = getSlug('wPanggilan');
-    const panggilP = getSlug('pPanggilan');
-    const isPria = document.getElementById('susunan').value === 'pria';
-    
-    // Jangan buat URL jika kedua nama masih kosong
-    if (!panggilW && !panggilP) return null; 
-
-    // Atur susunan nama berdasarkan pilihan form
-    return isPria ? `${panggilP}-${panggilW}` : `${panggilW}-${panggilP}`;
-}
-
-// --- 2. Ganti Fungsi saveToSupabaseSilently() yang Lama ---
-async function saveToSupabaseSilently() {
-    const currentData = getFormData();
-    const isChanged = fieldIds.some(id => currentData[id] !== lastSavedData[id]);
-
-    if (!isChanged && supabaseDbId) return { url_undangan: generateUrlUndangan() }; // Lewati jika tidak ada perubahan
-    lastSavedData = { ...currentData };
-
-    try {
-        const username = getCurrentUsername();
-        let slug = generateUrlUndangan();
-        
-        const payload = {
-            session_id: supabaseSessionId,
-            ...currentData,
-            updated_at: new Date().toISOString(),
-            ...(username && { usernamePercetakan: username }) 
-        };
-
-        // Masukkan url_undangan ke dalam payload jika nama sudah diisi
-        if (slug) {
-            payload.url_undangan = slug;
+        function getCurrentUsername() {
+            const userStr = localStorage.getItem('user_percetakan');
+            return userStr ? JSON.parse(userStr).username : null;
         }
 
-        let { data, error } = await supabaseClient
-            .from('data_undangan')
-            .upsert(payload, { onConflict: 'session_id' })
-            .select('id, url_undangan')
-            .single();
-
-        // Jika URL bentrok di database (error kode 23505 / unique violation), tambahkan angka acak
-        if (error?.code === '23505' && slug) {
-            payload.url_undangan = `${slug}-${Math.floor(Math.random() * 1000)}`;
-            const retry = await supabaseClient
-                .from('data_undangan')
-                .upsert(payload, { onConflict: 'session_id' })
-                .select('id, url_undangan')
-                .single();
-            data = retry.data;
-            error = retry.error;
+        function getFormData() {
+            return fieldIds.reduce((acc, id) => {
+                const el = document.getElementById(id);
+                if (el) acc[id] = el.value;
+                return acc;
+            }, {});
         }
 
-        if (error) throw error;
-        if (data?.id) supabaseDbId = data.id;
-        
-        return data; // Return data agar bisa dipakai oleh fungsi Buat Web & QR
-    } catch (error) {
-        console.error("Gagal auto-save ke Supabase:", error);
-        return null;
-    }
-}
+        async function buildPdfBase() {
+            await saveToSupabaseSilently();
 
-// --- 3. Ganti Fungsi generateWebLinkAndQR() yang Lama ---
-async function generateWebLinkAndQR() {
-    const reqFields = ['wPanggilan', 'pPanggilan', 'tanggalResepsi', 'jamResepsi', 'maps_link'];
-    const missing = reqFields.filter(id => !document.getElementById(id).value.trim())
-                             .map(id => fieldNamesDisplay[id] || id);
+            const { PDFDocument, StandardFonts, rgb } = PDFLib;
+            const pdfDoc = await PDFDocument.create();
+            const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+            let page = pdfDoc.addPage();
+            
+            const data = getFormData();
+            const tanggalDibuat = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-    if (missing.length > 0) {
-        return showModal("Syarat pembuatan Link belum lengkap:\n- " + missing.join("\n- "));
-    }
+            data.tanggalDibuat = tanggalDibuat;
+            data.supabaseSessionId = supabaseSessionId;
+            if (supabaseDbId) data.id = supabaseDbId;
+            
+            const username = getCurrentUsername();
+            if (username) data.usernamePercetakan = username;
 
-    const btn = event.currentTarget; // Jika dipanggil dari tombol
-    const originalContent = btn.innerHTML;
-    btn.innerHTML = '<span class="text-[11px] font-semibold">Memproses...</span>';
-    btn.disabled = true;
+            pdfDoc.setSubject(JSON.stringify(data));
+            pdfDoc.setTitle("Data Undangan - " + (data.wPanggilan || 'Mempelai'));
 
-    try {
-        // Panggil fungsi save utama agar data diproses, dan ambil URL-nya
-        const savedData = await saveToSupabaseSilently();
-
-        // Tambahkan kode ini di dalam blok try { ... } pada fungsi generateWebLinkAndQR()
-// Tepat setelah baris: const savedData = await saveToSupabaseSilently();
-
-if (savedData && savedData.url_undangan) {
-    // 1. Ekstrak data form untuk design
-    const panggilW = document.getElementById('wPanggilan').value.trim();
-    const panggilP = document.getElementById('pPanggilan').value.trim();
-    const susunan = document.getElementById('susunan').value;
-    
-    // Tentukan urutan nama berdasarkan susunan
-    const gabunganNama = susunan === 'pria' ? `${panggilP} & ${panggilW}` : `${panggilW} & ${panggilP}`;
-
-    // 2. Pecah string Hari & Tanggal Resepsi (Asumsi format: "Sabtu, 04 Juli 2026")
-    const tglResepsiText = document.getElementById('tanggalResepsi').value.trim();
-    const tglMatch = tglResepsiText.match(/([a-zA-Z]+),\s*(\d{1,2})\s*([a-zA-Z]+)\s*(\d{4})/);
-    
-    let resHari = "", resTanggal = "", resBulan = "", resTahun = "";
-    if (tglMatch) {
-        resHari = tglMatch[1];
-        resTanggal = tglMatch[2];
-        resBulan = tglMatch[3];
-        resTahun = tglMatch[4];
-    }
-
-    // 3. Bangun objek JSON untuk design_data
-    const designData = {
-        "cover-names": { "customText": gabunganNama },
-        "closing-names": { "customText": gabunganNama },
-        "akad-tanggal": { "customText": document.getElementById('tanggalAkad').value.trim() },
-        "akad-waktu": { "customText": document.getElementById('jamAkad').value.trim() },
-        "akad-tempat": { "customText": document.getElementById('tempatAkad').value.trim() },
-        "akad-alamat": { "customText": document.getElementById('alamatAkad').value.trim() },
-        "resepsi-hari": { "customText": resHari },
-        "resepsi-tanggal": { "customText": resTanggal },
-        "resepsi-bulan": { "customText": resBulan },
-        "resepsi-tahun": { "customText": resTahun },
-        "resepsi-waktu": { "customText": document.getElementById('jamResepsi').value.trim() },
-        "resepsi-tempat": { "customText": document.getElementById('tempatResepsi').value.trim() },
-        "event-alamat": { "customText": document.getElementById('alamatResepsi').value.trim() }
-    };
-
-    // 4. Lakukan Upsert ke tabel invitation_designs
-    const { error: designError } = await supabaseClient
-        .from('invitation_designs')
-        .upsert({
-            design_id: savedData.url_undangan,
-            design_data: designData,
-            updated_at: new Date().toISOString()
-        }, { onConflict: 'design_id' });
-
-    if (designError) {
-        console.error("Gagal menyimpan data desain undangan:", designError);
-    }
-}
-        
-        if (!savedData || !savedData.url_undangan) {
-            throw new Error("Gagal mengambil atau membuat URL Undangan dari database.");
-        }
-
-        const finalUrl = BASE_WEB_URL + savedData.url_undangan;
-        executeCopy(finalUrl, false);
-        showModal(`Tautan Undangan Web berhasil dibuat!\n\nLink tersalin: ${finalUrl}\n\nQR Code otomatis terunduh dalam beberapa detik.`);
-
-        const qrContainer = document.getElementById('qrContainer');
-        qrContainer.innerHTML = ""; 
-        new QRCode(qrContainer, { text: finalUrl, width: 500, height: 500, colorDark: "#0A1128", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
-
-        setTimeout(() => {
-            const originalCanvas = qrContainer.querySelector('canvas');
-            if (originalCanvas) {
-                // Membuat canvas baru dengan ukuran lebih besar untuk pinggiran putih
-                const padding = 40; // Lebar pinggiran putih dalam pixel (bisa disesuaikan)
-                const newCanvas = document.createElement('canvas');
-                newCanvas.width = originalCanvas.width + (padding * 2);
-                newCanvas.height = originalCanvas.height + (padding * 2);
-                
-                const ctx = newCanvas.getContext('2d');
-                
-                // Isi background canvas baru dengan warna putih
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
-                
-                // Gambar QR Code asli ke posisi tengah canvas baru
-                ctx.drawImage(originalCanvas, padding, padding);
-
-                // Unduh hasil dari canvas yang baru (yang sudah memiliki pinggiran)
-                const a = Object.assign(document.createElement('a'), { 
-                    href: newCanvas.toDataURL("image/png"), 
-                    download: `QR_Undangan_${savedData.url_undangan}.png` 
-                });
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
+            const textToPrint = `Tanggal Pembuatan Data: ${tanggalDibuat}\n\n` + document.getElementById('previewText').value; 
+            let y = page.getHeight() - 50;
+            
+            for (let line of textToPrint.split('\n')) {
+                if (y < 50) {
+                    page = pdfDoc.addPage();
+                    y = page.getHeight() - 50;
+                }
+                const cleanLine = line.replace(/[^\x20-\x7E\xA0-\xFF]/g, '').substring(0, 90);
+                const isHeader = line.startsWith("Tanggal Pembuatan Data:");
+                page.drawText(cleanLine, { x: 50, y, size: isHeader ? 9 : 11, font, color: isHeader ? rgb(0.4,0.4,0.4) : rgb(0,0,0) });
+                y -= 16;
             }
-        }, 800);
 
-    } catch (err) {
-        console.error(err);
-        showModal("Terjadi kesalahan sistem saat menyimpan tautan ke database Supabase.");
-    } finally {
-        btn.innerHTML = originalContent;
-        btn.disabled = false;
-    }
-}
-
-async function sendPdfToWhatsApp() {
-    try {
-        // Panggil helper pembuat PDF
-        const { blob, fileName } = await buildPdfBase();
-        const file = new File([blob], fileName, { type: "application/pdf" });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-                files: [file],
-                title: 'Data Undangan',
-                text: 'Berikut file PDF data undangan klien. (Bisa di-import kembali ke sistem)'
-            });
-            showModal("Data berhasil dibagikan dalam format PDF dan form telah dikosongkan.");
-        } else {
-            const url = URL.createObjectURL(blob);
-            const a = Object.assign(document.createElement('a'), { href: url, download: fileName });
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
-            showModal("Browser Anda tidak mendukung share langsung. File PDF telah diunduh, silakan kirim manual ke WA. Form dikosongkan.");
+            const wNama = (data.wPanggilan || (data.wNama || '').split(' ')[0] || 'Wanita').trim();
+            const pNama = (data.pPanggilan || (data.pNama || '').split(' ')[0] || 'Pria').trim();
+            const namaFileGabungan = (data.susunan === 'pria' ? `${pNama}&${wNama}` : `${wNama}&${pNama}`).replace(/\s+/g, '');
+            
+            return {
+                blob: new Blob([await pdfDoc.save()], { type: "application/pdf" }),
+                fileName: `Data_Undangan_${namaFileGabungan}.pdf`
+            };
         }
-        clearForm();
-    } catch (error) {
-        showModal("Terjadi kesalahan saat memproses file PDF.");
-        console.error(error);
-    }
-}
 
-async function uploadPdfToDrive() {
-    const btn = document.getElementById('btnUploadDrive');
-    const originalContent = btn.innerHTML;
-    
-    btn.innerHTML = '<svg class="animate-spin h-4 w-4 lg:mx-auto lg:mb-1 mr-2 lg:mr-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span class="text-[10px] font-semibold leading-tight">Proses...</span>';
-    btn.disabled = true;
+        function generateUrlUndangan() {
+            const getSlug = (id) => {
+                const el = document.getElementById(id);
+                return el ? el.value.trim().toLowerCase().replace(/[^a-z0-9]/g, '') : '';
+            };
+            const panggilW = getSlug('wPanggilan');
+            const panggilP = getSlug('pPanggilan');
+            const isPria = document.getElementById('susunan').value === 'pria';
+            
+            if (!panggilW && !panggilP) return null; 
 
-    try {
-        const { blob, fileName } = await buildPdfBase();
-        const base64Data = await blobToBase64(blob);
+            return isPria ? `${panggilP}-${panggilW}` : `${panggilW}-${panggilP}`;
+        }
 
-        const formData = new URLSearchParams({
-            fileName: fileName,
-            mimeType: 'application/pdf',
-            fileData: base64Data
-        });
+        async function saveToSupabaseSilently() {
+            const currentData = getFormData();
+            const isChanged = fieldIds.some(id => currentData[id] !== lastSavedData[id]);
 
-        const response = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData });
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            executeCopy(result.url, false);
-            clearForm();
-        } else throw new Error(result.message);
+            if (!isChanged && supabaseDbId) return { url_undangan: generateUrlUndangan() };
+            lastSavedData = { ...currentData };
 
-    } catch (error) {
-        console.error(error);
-        showModal("Terjadi kesalahan saat mengunggah file ke Google Drive.");
-    } finally {
-        btn.innerHTML = originalContent;
-        btn.disabled = false;
-    }
-}
+            try {
+                const username = getCurrentUsername();
+                let slug = generateUrlUndangan();
+                
+                const payload = {
+                    session_id: supabaseSessionId,
+                    ...currentData,
+                    updated_at: new Date().toISOString(),
+                    ...(username && { usernamePercetakan: username }) 
+                };
+
+                if (slug) {
+                    payload.url_undangan = slug;
+                }
+
+                let { data, error } = await supabaseClient
+                    .from('data_undangan')
+                    .upsert(payload, { onConflict: 'session_id' })
+                    .select('id, url_undangan')
+                    .single();
+
+                if (error?.code === '23505' && slug) {
+                    payload.url_undangan = `${slug}-${Math.floor(Math.random() * 1000)}`;
+                    const retry = await supabaseClient
+                        .from('data_undangan')
+                        .upsert(payload, { onConflict: 'session_id' })
+                        .select('id, url_undangan')
+                        .single();
+                    data = retry.data;
+                    error = retry.error;
+                }
+
+                if (error) throw error;
+                if (data?.id) supabaseDbId = data.id;
+                
+                return data;
+            } catch (error) {
+                console.error("Gagal auto-save ke Supabase:", error);
+                return null;
+            }
+        }
+
+        async function generateWebLinkAndQR() {
+            const reqFields = ['wPanggilan', 'pPanggilan', 'tanggalResepsi', 'jamResepsi', 'maps_link'];
+            const missing = reqFields.filter(id => !document.getElementById(id).value.trim())
+                                     .map(id => fieldNamesDisplay[id] || id);
+
+            if (missing.length > 0) {
+                return showModal("Syarat pembuatan Link belum lengkap:\n- " + missing.join("\n- "));
+            }
+
+            const btn = event.currentTarget;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="text-[11px] font-semibold">Memproses...</span>';
+            btn.disabled = true;
+
+            try {
+                const savedData = await saveToSupabaseSilently();
+
+                if (savedData && savedData.url_undangan) {
+                    const panggilW = document.getElementById('wPanggilan').value.trim();
+                    const panggilP = document.getElementById('pPanggilan').value.trim();
+                    const susunan = document.getElementById('susunan').value;
+                    
+                    const gabunganNama = susunan === 'pria' ? `${panggilP} & ${panggilW}` : `${panggilW} & ${panggilP}`;
+
+                    const tglResepsiText = document.getElementById('tanggalResepsi').value.trim();
+                    const tglMatch = tglResepsiText.match(/([a-zA-Z]+),\s*(\d{1,2})\s*([a-zA-Z]+)\s*(\d{4})/);
+                    
+                    let resHari = "", resTanggal = "", resBulan = "", resTahun = "";
+                    if (tglMatch) {
+                        resHari = tglMatch[1];
+                        resTanggal = tglMatch[2];
+                        resBulan = tglMatch[3];
+                        resTahun = tglMatch[4];
+                    }
+
+                    const designData = {
+                        "cover-names": { "customText": gabunganNama },
+                        "closing-names": { "customText": gabunganNama },
+                        "akad-tanggal": { "customText": document.getElementById('tanggalAkad').value.trim() },
+                        "akad-waktu": { "customText": document.getElementById('jamAkad').value.trim() },
+                        "akad-tempat": { "customText": document.getElementById('tempatAkad').value.trim() },
+                        "akad-alamat": { "customText": document.getElementById('alamatAkad').value.trim() },
+                        "resepsi-hari": { "customText": resHari },
+                        "resepsi-tanggal": { "customText": resTanggal },
+                        "resepsi-bulan": { "customText": resBulan },
+                        "resepsi-tahun": { "customText": resTahun },
+                        "resepsi-waktu": { "customText": document.getElementById('jamResepsi').value.trim() },
+                        "resepsi-tempat": { "customText": document.getElementById('tempatResepsi').value.trim() },
+                        "event-alamat": { "customText": document.getElementById('alamatResepsi').value.trim() }
+                    };
+
+                    const { error: designError } = await supabaseClient
+                        .from('invitation_designs')
+                        .upsert({
+                            design_id: savedData.url_undangan,
+                            design_data: designData,
+                            updated_at: new Date().toISOString()
+                        }, { onConflict: 'design_id' });
+
+                    if (designError) {
+                        console.error("Gagal menyimpan data desain undangan:", designError);
+                    }
+                }
+                
+                if (!savedData || !savedData.url_undangan) {
+                    throw new Error("Gagal mengambil atau membuat URL Undangan dari database.");
+                }
+
+                const finalUrl = BASE_WEB_URL + savedData.url_undangan;
+                executeCopy(finalUrl);
+                showModal(`Tautan Undangan Web berhasil dibuat!\n\nLink tersalin: ${finalUrl}\n\nQR Code otomatis terunduh dalam beberapa detik.`);
+
+                const qrContainer = document.getElementById('qrContainer');
+                qrContainer.innerHTML = ""; 
+                new QRCode(qrContainer, { text: finalUrl, width: 500, height: 500, colorDark: "#0A1128", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
+
+                setTimeout(() => {
+                    const originalCanvas = qrContainer.querySelector('canvas');
+                    if (originalCanvas) {
+                        const padding = 40;
+                        const newCanvas = document.createElement('canvas');
+                        newCanvas.width = originalCanvas.width + (padding * 2);
+                        newCanvas.height = originalCanvas.height + (padding * 2);
+                        
+                        const ctx = newCanvas.getContext('2d');
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+                        ctx.drawImage(originalCanvas, padding, padding);
+
+                        const a = Object.assign(document.createElement('a'), { 
+                            href: newCanvas.toDataURL("image/png"), 
+                            download: `QR_Undangan_${savedData.url_undangan}.png` 
+                        });
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                    }
+                }, 800);
+
+            } catch (err) {
+                console.error(err);
+                showModal("Terjadi kesalahan sistem saat menyimpan tautan ke database Supabase.");
+            } finally {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }
+        }
+
+        async function sendPdfToWhatsApp() {
+            try {
+                const { blob, fileName } = await buildPdfBase();
+                const file = new File([blob], fileName, { type: "application/pdf" });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Data Undangan',
+                        text: 'Berikut file PDF data undangan klien. (Bisa di-import kembali ke sistem)'
+                    });
+                    showModal("Data berhasil dibagikan dalam format PDF dan form telah dikosongkan.");
+                } else {
+                    const url = URL.createObjectURL(blob);
+                    const a = Object.assign(document.createElement('a'), { href: url, download: fileName });
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    URL.revokeObjectURL(url);
+                    showModal("Browser Anda tidak mendukung share langsung. File PDF telah diunduh, silakan kirim manual ke WA. Form dikosongkan.");
+                }
+                clearForm();
+            } catch (error) {
+                showModal("Terjadi kesalahan saat memproses file PDF.");
+                console.error(error);
+            }
+        }
+
+        async function uploadPdfToDrive() {
+            const btn = document.getElementById('btnUploadDrive');
+            const originalContent = btn.innerHTML;
+            
+            btn.innerHTML = '<svg class="animate-spin h-4 w-4 lg:mx-auto lg:mb-1 mr-2 lg:mr-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span class="text-[10px] font-semibold leading-tight">Proses...</span>';
+            btn.disabled = true;
+
+            try {
+                const { blob, fileName } = await buildPdfBase();
+                const base64Data = await blobToBase64(blob);
+
+                const formData = new URLSearchParams({
+                    fileName: fileName,
+                    mimeType: 'application/pdf',
+                    fileData: base64Data
+                });
+
+                const response = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    executeCopy(result.url);
+                    clearForm();
+                } else throw new Error(result.message);
+
+            } catch (error) {
+                console.error(error);
+                showModal("Terjadi kesalahan saat mengunggah file ke Google Drive.");
+            } finally {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }
+        }
 
         function isValid(str) { return str && str.trim() !== '' && str.trim() !== '-'; }
 
@@ -1883,19 +1885,16 @@ async function uploadPdfToDrive() {
             return text;
         }
 
-    function formatTeksWaktu(waktuVal) {
+        function formatTeksWaktu(waktuVal) {
             if (!waktuVal) return "";
             
-            // 1. Ubah format dari HH:MM menjadi HH.MM (contoh: 16:00 -> 16.00)
             let wkt = waktuVal.replace(/(\d{1,2}):(\d{2})/g, '$1.$2');
 
-            // 2. Tambahkan "Wita" jika tidak ada keterangan zona waktu
             if (!/wita|wit|wib/i.test(wkt)) {
-                // Sisipkan "Wita" tepat setelah pola angka jam (misal setelah 16.00)
                 if (/(\d{1,2}\.\d{2})/.test(wkt)) {
                     wkt = wkt.replace(/(\d{1,2}\.\d{2})/, '$1 Wita');
                 } else {
-                    wkt += " Wita"; // Fallback jika tidak ada pola jam yang spesifik
+                    wkt += " Wita";
                 }
             }
 
@@ -1909,7 +1908,7 @@ async function uploadPdfToDrive() {
             }).join(' ');
         }
 
-  function generateText() {
+        function generateText() {
             const susunan = document.getElementById('susunan').value;
             
             const wNamaLengkap = document.getElementById('wPanggilan').value.trim() ? (document.getElementById('wNama').value.trim() ? `${document.getElementById('wNama').value.trim()} (${document.getElementById('wPanggilan').value.trim()})` : `(${document.getElementById('wPanggilan').value.trim()})`) : document.getElementById('wNama').value.trim();
@@ -1931,9 +1930,7 @@ async function uploadPdfToDrive() {
             let jamAkadText = formatTeksWaktu(document.getElementById('jamAkad').value.trim());
             let jamResepsiText = formatTeksWaktu(document.getElementById('jamResepsi').value.trim());
 
-            // Tambahkan baris penangkap teksAyat ini:
             const teksAyat = document.getElementById('teksAyat') ? document.getElementById('teksAyat').value.trim() : "";
-            
             const teksPembuka = document.getElementById('teksPembuka').value;
             const teksPenutup = document.getElementById('teksPenutup').value;
             const teksPengantarAcara = document.getElementById('teksPengantarAcara').value;
@@ -1941,7 +1938,6 @@ async function uploadPdfToDrive() {
             const jenis = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
             const judulAkad = (jenis === 'kristen') ? 'PEMBERKATAN' : 'AKAD NIKAH';
 
-            // --- Logika Susunan Blok Akad ---
             let akadBlock = `${judulAkad}\nHari/Tanggal: ${document.getElementById('tanggalAkad').value.trim()}`;
             if (jamAkadText) akadBlock += `\n${jamAkadText}`;
             
@@ -1954,7 +1950,6 @@ async function uploadPdfToDrive() {
                 if (alamatAkad) akadBlock += `\n${alamatAkad}`;
             }
 
-            // --- Logika Susunan Blok Resepsi ---
             let resBlock = `Hari/Tanggal: ${document.getElementById('tanggalResepsi').value.trim()}`;
             if (ketOrderIndex === 1 && ket) resBlock += `\n${ket}`;
             if (jamResepsiText) resBlock += `\n${jamResepsiText}`;
@@ -1993,6 +1988,8 @@ ${teksPenutup}
 Hormat kami yang mengundang
 ${document.getElementById('hormat').value.trim()}
 ${turutMengundangText}`;
+
+            updateCopyPreviews();
         }
 
         const getVal = (id, fallback = '') => document.getElementById(id)?.value.trim() || fallback;
@@ -2002,23 +1999,159 @@ ${turutMengundangText}`;
             return match ? { tanggal: match[1], bulan: match[2], tahun: match[3] } : null;
         };
 
-        function copyCorelFileName() {
+        // --- HELPER TEKS UNTUK MASING-MASING TOMBOL SALIN ---
+        function getCorelMissingFields() {
+            const missing = [];
+            if (!getVal('kodeUndangan')) missing.push('Kode Undangan');
+            if (!getVal('jumlahUndangan')) missing.push('Jumlah Undangan');
+            if (getVal('susunan') === 'pria') {
+                if (!getVal('pPanggilan')) missing.push('Nama Panggilan Pria');
+                if (!getVal('wPanggilan')) missing.push('Nama Panggilan Wanita');
+            } else {
+                if (!getVal('wPanggilan')) missing.push('Nama Panggilan Wanita');
+                if (!getVal('pPanggilan')) missing.push('Nama Panggilan Pria');
+            }
+            return missing;
+        }
+
+        function getCorelFileNameText() {
+            if (getCorelMissingFields().length > 0) return '';
             const today = new Date();
             const tglHariIni = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
-            
-            const kode = getVal('kodeUndangan', 'KODE');
-            const panggilW = getVal('wPanggilan', 'Wanita').replace(/\s+/g, '');
-            const panggilP = getVal('pPanggilan', 'Pria').replace(/\s+/g, '');
+            const kode = getVal('kodeUndangan');
+            const panggilW = getVal('wPanggilan').replace(/\s+/g, '');
+            const panggilP = getVal('pPanggilan').replace(/\s+/g, '');
             const susunan = getVal('susunan');
             const namaPanggilan = susunan === 'pria' ? `${panggilP}&${panggilW}` : `${panggilW}&${panggilP}`;
-            const jumlah = getVal('jumlahUndangan', '0');
+            const jumlah = getVal('jumlahUndangan');
+            return `${tglHariIni} ${kode} ${namaPanggilan} x${jumlah}`;
+        }
 
-            executeCopy(`${tglHariIni} ${kode} ${namaPanggilan} x${jumlah}`);
+        function updateCorelPreview() {
+            const el = document.getElementById('preview-copy-corel');
+            if (!el) return;
+            const btn = el.parentElement ? el.parentElement.querySelector('button') : null;
+            const missing = getCorelMissingFields();
+
+            if (missing.length > 0) {
+                el.innerHTML = `<span class="text-amber-400 italic text-[11px]">Data belum terisi: ${missing.join(', ')}</span>`;
+                if (btn) btn.disabled = true;
+            } else {
+                el.textContent = getCorelFileNameText();
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        function getBrideParentText() {
+            return getParentText('wanita', document.getElementById('wAnak').value, document.getElementById('wBapak').value, document.getElementById('wIbu').value);
+        }
+
+        function getGroomParentText() {
+            return getParentText('pria', document.getElementById('pAnak').value, document.getElementById('pBapak').value, document.getElementById('pIbu').value);
+        }
+
+        function getTglDanWaktuAkadText() {
+            const tgl = getVal('tanggalAkad');
+            const wktText = formatTeksWaktu(getVal('jamAkad'));
+            return (tgl || wktText) ? `${tgl} | ${wktText}`.replace(/^ \| | \| $/g, '') : '';
+        }
+
+        function getAlamatAkadText() {
+            const tempat = getVal('tempatAkad');
+            const alamat = getVal('alamatAkad');
+            if (!tempat && !alamat) return '';
+            let teks = "Bertempat di";
+            if (tempat) teks += `\n${tempat}`;
+            if (alamat) teks += `\n${alamat}`;
+            return teks;
+        }
+
+        function getHariResepsiText() {
+            const tanggalResepsi = getVal('tanggalResepsi');
+            return tanggalResepsi ? tanggalResepsi.split(',')[0].trim() : '';
+        }
+
+        function getResepsiTanggalSajaText() {
+            const p = parseDateString(getVal('tanggalResepsi'));
+            return p ? p.tanggal : '';
+        }
+
+        function getResepsiBulanTahunText() {
+            const p = parseDateString(getVal('tanggalResepsi'));
+            return p ? `${p.bulan}\n${p.tahun}` : '';
+        }
+
+        function getAlamatResepsiText() {
+            const tempat = getVal('tempatResepsi');
+            const alamat = getVal('alamatResepsi');
+            if (!tempat && !alamat) return '';
+            let teks = "Bertempat di";
+            if (tempat) teks += `\n${tempat}`;
+            if (alamat) teks += `\n${alamat}`;
+            return teks;
+        }
+
+        function getTurutMengundangText() {
+            const lines = getVal('turutMengundang').split('\n').filter(l => l.trim() !== '');
+            return lines.length === 0 ? '' : lines.map(l => `* ${l.trim()}`).join('\n');
+        }
+
+        function setPreviewBox(elementId, text) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const btn = el.parentElement ? el.parentElement.querySelector('button') : null;
+            const hasText = Boolean(text && text.trim() !== '');
+
+            if (hasText) {
+                el.textContent = text;
+            } else {
+                el.innerHTML = '<span class="text-gray-500 italic text-[11px]">Belum ada teks</span>';
+            }
+
+            if (btn) {
+                btn.disabled = !hasText;
+            }
+        }
+
+        function updateCopyPreviews() {
+            const btnFull = document.getElementById('btnCopyFullText');
+            if (btnFull) {
+                btnFull.disabled = !getVal('previewText');
+            }
+
+            updateCorelPreview();
+            setPreviewBox('preview-copy-wNama', getVal('wNama'));
+            setPreviewBox('preview-copy-wParent', getBrideParentText());
+            setPreviewBox('preview-copy-pNama', getVal('pNama'));
+            setPreviewBox('preview-copy-pParent', getGroomParentText());
+            setPreviewBox('preview-copy-tglWaktuAkad', getTglDanWaktuAkadText());
+            setPreviewBox('preview-copy-tanggalAkad', getVal('tanggalAkad'));
+            setPreviewBox('preview-copy-jamAkad', getVal('jamAkad') ? formatTeksWaktu(getVal('jamAkad')) : '');
+            setPreviewBox('preview-copy-alamatAkad', getAlamatAkadText());
+            setPreviewBox('preview-copy-tanggalResepsi', getVal('tanggalResepsi'));
+            setPreviewBox('preview-copy-hariResepsi', getHariResepsiText());
+            setPreviewBox('preview-copy-tglAngkaResepsi', getResepsiTanggalSajaText());
+            setPreviewBox('preview-copy-bulanTahunResepsi', getResepsiBulanTahunText());
+            setPreviewBox('preview-copy-ketResepsi', getVal('keteranganResepsi'));
+            setPreviewBox('preview-copy-jamResepsi', getVal('jamResepsi') ? formatTeksWaktu(getVal('jamResepsi')) : '');
+            setPreviewBox('preview-copy-alamatResepsi', getAlamatResepsiText());
+            setPreviewBox('preview-copy-hostName', getVal('hormat'));
+            setPreviewBox('preview-copy-turutMengundang', getTurutMengundangText());
+        }
+
+        // --- FUNGSI EKSEKUSI SALIN ---
+        function copyCorelFileName() {
+            const missing = getCorelMissingFields();
+            if (missing.length > 0) {
+                showModal("Data nama file Corel belum lengkap:\n- " + missing.join("\n- "));
+                return;
+            }
+            executeCopy(getCorelFileNameText());
         }
 
         function copyFullText() { 
             const text = getVal('previewText');
-            text ? executeCopy(text, true) : showModal("Teks undangan (Preview) masih kosong."); 
+            text ? executeCopy(text) : showModal("Teks undangan (Preview) masih kosong."); 
         }
 
         function copyGroomName() { 
@@ -2044,60 +2177,44 @@ ${turutMengundangText}`;
         function copyHariResepsi() {
             const tanggalResepsi = getVal('tanggalResepsi');
             if (tanggalResepsi) {
-                const hari = tanggalResepsi.split(',')[0].trim();
+                const hari = getHariResepsiText();
                 hari ? executeCopy(hari) : showModal("Format hari resepsi tidak ditemukan.");
             } else {
                 showModal("Hari & Tanggal Resepsi masih kosong.");
             }
         }
 
-function copyAlamatAkad() { 
-            const tempat = getVal('tempatAkad');
-            const alamat = getVal('alamatAkad');
-            
-            if (!tempat && !alamat) {
+        function copyAlamatAkad() { 
+            const teks = getAlamatAkadText();
+            if (!teks) {
                 showModal("Lokasi Akad/Pemberkatan masih kosong.");
                 return;
             }
-            
-            let teks = "Bertempat di";
-            if (tempat) teks += `\n${tempat}`;
-            if (alamat) teks += `\n${alamat}`;
             executeCopy(teks); 
         }
 
         function copyAlamatResepsi() { 
-            const tempat = getVal('tempatResepsi');
-            const alamat = getVal('alamatResepsi');
-            
-            if (!tempat && !alamat) {
+            const teks = getAlamatResepsiText();
+            if (!teks) {
                 showModal("Lokasi Resepsi masih kosong.");
                 return;
             }
-            
-            let teks = "Bertempat di";
-            if (tempat) teks += `\n${tempat}`;
-            if (alamat) teks += `\n${alamat}`;
             executeCopy(teks); 
         }
 
-
         function copyResepsiTanggalSaja() { 
-            const p = parseDateString(getVal('tanggalResepsi')); 
-            p ? executeCopy(p.tanggal) : showModal("Format tanggal tidak valid."); 
+            const tgl = getResepsiTanggalSajaText(); 
+            tgl ? executeCopy(tgl) : showModal("Format tanggal tidak valid."); 
         }
 
         function copyTglDanWaktuAkad() {
-            const tgl = getVal('tanggalAkad');
-            const wktText = formatTeksWaktu(getVal('jamAkad'));
-            const combined = (tgl || wktText) ? `${tgl} | ${wktText}`.replace(/^ \| | \| $/g, '') : '';
-            
+            const combined = getTglDanWaktuAkadText();
             combined ? executeCopy(combined) : showModal(`Tanggal dan Waktu kosong.`);
         }
 
         function copyResepsiBulanTahun() {
-            const p = parseDateString(getVal('tanggalResepsi'));
-            p ? executeCopy(`${p.bulan}\n${p.tahun}`) : showModal("Format tanggal resepsi tidak valid.");
+            const blnThn = getResepsiBulanTahunText();
+            blnThn ? executeCopy(blnThn) : showModal("Format tanggal resepsi tidak valid.");
         }
 
         function copyKeteranganResepsi() { 
@@ -2106,8 +2223,8 @@ function copyAlamatAkad() {
         }
 
         function copyTurutMengundang() {
-            const lines = getVal('turutMengundang').split('\n').filter(l => l.trim() !== '');
-            lines.length === 0 ? showModal("Belum ada nama Pengundang.") : executeCopy(lines.map(l => `* ${l.trim()}`).join('\n'));
+            const teks = getTurutMengundangText();
+            !teks ? showModal("Belum ada nama Pengundang.") : executeCopy(teks);
         }
 
         function copyHostName() { 
@@ -2125,26 +2242,34 @@ function copyAlamatAkad() {
             j ? executeCopy(formatTeksWaktu(j)) : showModal("Waktu resepsi kosong."); 
         }
 
-        function executeCopy(textToCopy, hideText = false) {
+        function executeCopy(textToCopy) {
             if (!textToCopy) return;
             navigator.clipboard.writeText(textToCopy)
                 .then(() => {
-                    if (hideText) {
-                        showToast(" ");
-                    } else {
-                        const lineCount = textToCopy.split('\n').length;
-                        const textSizeClass = lineCount > 10 ? 'text-[10px] leading-tight' : 'text-xs';
-                        const cleanText = textToCopy.replace(/\n/g, '<br>');
-                        showToast(`<span class="${textSizeClass} font-semibold text-gold-300 block">${cleanText}</span>`);
-                    }
+                    showToast("Disalin", true);
                 })
                 .catch(err => console.error('Gagal menyalin:', err));
         }
 
         let toastTimeout;
-        function showToast(message) {
+        function showToast(message, isSimple = false) {
             const toast = document.getElementById('toast');
-            if (message) document.getElementById('toast-message').innerHTML = message;
+            const titleEl = document.getElementById('toast-title');
+            const msgEl = document.getElementById('toast-message');
+
+            if (isSimple) {
+                if (titleEl) titleEl.classList.add('hidden');
+                if (msgEl) {
+                    msgEl.className = "text-sm font-semibold text-white tracking-wide";
+                    msgEl.textContent = message;
+                }
+            } else {
+                if (titleEl) titleEl.classList.remove('hidden');
+                if (msgEl) {
+                    msgEl.className = "text-xs text-white opacity-90 break-words";
+                    if (message) msgEl.innerHTML = message;
+                }
+            }
             
             if (toastTimeout) clearTimeout(toastTimeout);
             
@@ -2154,7 +2279,7 @@ function copyAlamatAkad() {
             toastTimeout = setTimeout(() => {
                 toast.classList.remove('toast-enter');
                 toast.classList.add('toast-exit');
-            }, 3000);
+            }, isSimple ? 1800 : 3000);
         }
 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6AZCbRl8yUvWFuiStX5dvcoHg8PMz_02I-c4Ag2cw79hKLBKwPHY_qunbc47tdP5k/exec";
@@ -2166,6 +2291,6 @@ function copyAlamatAkad() {
                 reader.readAsDataURL(blob);
             });
         }
- </script>
+    </script>
 </body>
 </html>
