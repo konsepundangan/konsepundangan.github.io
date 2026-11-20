@@ -1770,7 +1770,7 @@ dan selalu mengumpulkan kalian berdua dalam kebaikan."
 
                 const finalUrl = BASE_WEB_URL + savedData.url_undangan;
                 executeCopy(finalUrl);
-                showModal(`Tautan Undangan Web berhasil dibuat!\n\nLink tersalin: ${finalUrl}\n\nQR Code otomatis terunduh dalam beberapa detik.`);
+                showModal(`Tautan Undangan Web berhasil dibuat!\n\nLink tersalin: ${finalUrl}\n\nQR Code otomatis terunduh dan halaman web akan terbuka otomatis.`);
 
                 const qrContainer = document.getElementById('qrContainer');
                 qrContainer.innerHTML = ""; 
@@ -1797,6 +1797,14 @@ dan selalu mengumpulkan kalian berdua dalam kebaikan."
                         a.click();
                         a.remove();
                     }
+
+                    // Otomatis buka halaman web undangan setelah QR berhasil dibuat dan diunduh
+                    setTimeout(() => {
+                        const newTab = window.open(finalUrl, '_blank');
+                        if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
+                            window.location.href = finalUrl;
+                        }
+                    }, 300);
                 }, 800);
 
             } catch (err) {
